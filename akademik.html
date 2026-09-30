@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Akademik & Kesiswaan SMA Negeri 1 Harapan Bangsa - Kurikulum Merdeka, Kalender Akademik, dan Direktori Ekstrakurikuler.">
+  <title>Akademik & Kesiswaan | SMA Negeri 1 Harapan Bangsa</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            },
+            accent: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen selection:bg-brand-500 selection:text-white">
+
+  <!-- TOP BAR -->
+  <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+      <div class="flex items-center flex-wrap justify-center gap-4">
+        <span class="flex items-center gap-1.5"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-accent-400"></i> Jl. Pendidikan No. 45, Harapan Jaya</span>
+        <span class="hidden sm:flex items-center gap-1.5"><i data-lucide="phone" class="w-3.5 h-3.5 text-accent-400"></i> (021) 8899-7766</span>
+        <span class="hidden sm:flex items-center gap-1.5"><i data-lucide="mail" class="w-3.5 h-3.5 text-accent-400"></i> info@sman1harapan.sch.id</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1 animate-pulse"></span> Akreditasi A (Unggul)
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN NAVIGATION -->
+  <header id="mainHeader" class="sticky top-0 z-40 bg-white/90 glass-nav border-b border-slate-200/80 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <a href="index.html" class="flex items-center gap-3 group">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-800 to-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+            <i data-lucide="graduation-cap" class="w-7 h-7"></i>
+          </div>
+          <div>
+            <span class="block text-lg font-bold text-slate-900 tracking-tight leading-none">SMA NEGERI 1</span>
+            <span class="text-xs font-semibold text-brand-600 tracking-wider uppercase">Harapan Bangsa</span>
+          </div>
+        </a>
+
+        <nav class="hidden lg:flex items-center gap-1">
+          <a href="index.html" class="px-3.5 py-2 text-sm font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50 rounded-lg transition-colors">Beranda</a>
+          <a href="profil.html" class="px-3.5 py-2 text-sm font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50 rounded-lg transition-colors">Profil</a>
+          <a href="akademik.html" class="px-3.5 py-2 text-sm font-semibold text-brand-600 bg-brand-50 rounded-lg transition-colors">Akademik & Kesiswaan</a>
+          <a href="berita.html" class="px-3.5 py-2 text-sm font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50 rounded-lg transition-colors">Berita & Agenda</a>
+          <a href="galeri.html" class="px-3.5 py-2 text-sm font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50 rounded-lg transition-colors">Galeri</a>
+          <a href="kontak.html" class="px-3.5 py-2 text-sm font-medium text-slate-700 hover:text-brand-600 hover:bg-slate-50 rounded-lg transition-colors">Kontak</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <a href="ppdb.html" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-accent-500 to-amber-600 text-white text-sm font-bold shadow-md shadow-amber-500/25 hover:shadow-lg transition-all">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            <span>PPDB 2026/2027</span>
+          </a>
+          <button id="mobileMenuBtn" class="lg:hidden p-2.5 rounded-xl text-slate-700 hover:bg-slate-100 transition-colors" aria-label="Buka Menu">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU DRAWER -->
+  <div id="mobileMenuOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden transition-opacity"></div>
+  <div id="mobileMenuDrawer" class="fixed top-0 right-0 w-80 max-w-full h-full bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-lg bg-brand-700 text-white flex items-center justify-center">
+          <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+        </div>
+        <span class="font-bold text-slate-900">SMAN 1 Harapan Bangsa</span>
+      </div>
+      <button id="mobileMenuClose" class="p-2 rounded-lg text-slate-500 hover:bg-slate-100" aria-label="Tutup Menu">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+    <div class="p-5 flex-1 overflow-y-auto space-y-2">
+      <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 font-medium"><i data-lucide="home" class="w-5 h-5"></i> Beranda</a>
+      <a href="profil.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 font-medium"><i data-lucide="school" class="w-5 h-5"></i> Profil Sekolah</a>
+      <a href="akademik.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-brand-50 text-brand-700 font-semibold"><i data-lucide="book-open" class="w-5 h-5"></i> Akademik & Kesiswaan</a>
+      <a href="berita.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 font-medium"><i data-lucide="newspaper" class="w-5 h-5"></i> Berita & Agenda</a>
+      <a href="galeri.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 font-medium"><i data-lucide="image" class="w-5 h-5"></i> Galeri Multimedia</a>
+      <a href="kontak.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 font-medium"><i data-lucide="phone-call" class="w-5 h-5"></i> Kontak & Lokasi</a>
+    </div>
+    <div class="p-5 border-t border-slate-100 bg-slate-50">
+      <a href="ppdb.html" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-accent-500 to-amber-600 text-white font-bold shadow-md">
+        <i data-lucide="user-plus" class="w-5 h-5"></i>
+        <span>Pendaftaran PPDB Online</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- PAGE HERO -->
+  <section class="hero-gradient text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
+      <div class="inline-flex items-center gap-2 text-xs font-semibold text-amber-300 bg-white/10 px-3 py-1 rounded-full backdrop-blur-md">
+        <a href="index.html" class="hover:underline">Beranda</a>
+        <span>/</span>
+        <span>Akademik & Kesiswaan</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">Akademik & Ekstrakurikuler</h1>
+      <p class="text-slate-200 text-sm sm:text-base max-w-2xl mx-auto">
+        Implementasi Kurikulum Merdeka yang memerdekakan potensi siswa, didukung ragam kegiatan pengembangan minat bakat dan kepemimpinan.
+      </p>
+    </div>
+  </section>
+
+  <!-- KURIKULUM MERDEKA -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid lg:grid-cols-12 gap-12 items-center">
+        <div class="lg:col-span-6 space-y-5">
+          <span class="text-brand-600 text-xs font-bold uppercase tracking-wider bg-brand-50 px-3 py-1 rounded-full border border-brand-100">
+            Struktur Pendidikan
+          </span>
+          <h2 class="text-3xl font-extrabold text-slate-900 leading-tight">
+            Implementasi Kurikulum Merdeka Berorientasi Masa Depan
+          </h2>
+          <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+            Kurikulum kami dirancang untuk membekali siswa dengan pemahaman esensial, keterampilan berpikir kritis tingkat tinggi (HOTS), serta projek penguatan Profil Pelajar Pancasila (P5).
+          </p>
+
+          <div class="space-y-4 pt-2">
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
+                Fase E (Kelas X - Fondasi Umum)
+              </h4>
+              <p class="text-xs text-slate-600 mt-1 pl-6">
+                Mempelajari seluruh mata pelajaran fondasi dasar untuk memetakan bakat, minat akademis, dan aspirasi karier masa depan.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-600"></i>
+                Fase F (Kelas XI & XII - Peminatan Mandiri)
+              </h4>
+              <p class="text-xs text-slate-600 mt-1 pl-6">
+                Siswa memilih rumpun mata pelajaran pilihan sesuai jurusan kuliah tujuan (Sains Terapan, Sosio-Humaniora, Bahasa, atau Rekayasa Komputasi).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6">
+          <div class="bg-gradient-to-br from-brand-900 to-indigo-950 p-8 rounded-3xl text-white shadow-xl space-y-6">
+            <h3 class="text-xl font-bold border-b border-white/10 pb-4">6 Dimensi Profil Pelajar Pancasila</h3>
+            
+            <div class="grid grid-cols-2 gap-4 text-xs">
+              <div class="p-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/10">
+                <p class="font-bold text-amber-300">1. Beriman & Bertaqwa</p>
+                <p class="text-slate-300 mt-1">Berakhlak mulia kepada sesama dan alam sekitar.</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/10">
+                <p class="font-bold text-amber-300">2. Berkebinekaan Global</p>
+                <p class="text-slate-300 mt-1">Menghargai budaya lokal dan perspektif internasional.</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/10">
+                <p class="font-bold text-amber-300">3. Gotong Royong</p>
+                <p class="text-slate-300 mt-1">Mampu bekerja sama dalam tim kolaboratif.</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/10">
+                <p class="font-bold text-amber-300">4. Mandiri</p>
+                <p class="text-slate-300 mt-1">Bertanggung jawab atas proses & hasil belajarnya.</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/10">
+                <p class="font-bold text-amber-300">5. Bernalar Kritis</p>
+                <p class="text-slate-300 mt-1">Mampu mengolah informasi dan memecahkan masalah.</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/10">
+                <p class="font-bold text-amber-300">6. Kreatif</p>
+                <p class="text-slate-300 mt-1">Menghasilkan gagasan dan karya orisinal bermakna.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- KALENDER AKADEMIK -->
+  <section class="py-16 bg-slate-50 border-t border-b border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-12 space-y-2">
+        <span class="text-brand-600 text-xs font-bold uppercase tracking-wider">Agenda Kegiatan</span>
+        <h2 class="text-3xl font-extrabold text-slate-900">Kalender Akademik 2026/2027</h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-bold uppercase text-brand-600 bg-brand-50 px-2.5 py-1 rounded-md">Semester Ganjil</span>
+            <i data-lucide="calendar" class="w-5 h-5 text-slate-400"></i>
+          </div>
+          <h4 class="font-bold text-slate-900 text-base mb-2">Penilaian Tengah Semester</h4>
+          <p class="text-xs text-slate-500 mb-4">Ujian evaluasi capaian pembelajaran triwulan awal.</p>
+          <div class="text-xs font-semibold text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-100 flex items-center gap-2">
+            <i data-lucide="clock" class="w-4 h-4 text-brand-600"></i>
+            <span>20 - 27 Oktober 2026</span>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-bold uppercase text-brand-600 bg-brand-50 px-2.5 py-1 rounded-md">Semester Ganjil</span>
+            <i data-lucide="calendar" class="w-5 h-5 text-slate-400"></i>
+          </div>
+          <h4 class="font-bold text-slate-900 text-base mb-2">Sumatif Akhir Semester (SAS)</h4>
+          <p class="text-xs text-slate-500 mb-4">Ujian akhir semester berbasis digital CBT terpusat.</p>
+          <div class="text-xs font-semibold text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-100 flex items-center gap-2">
+            <i data-lucide="clock" class="w-4 h-4 text-brand-600"></i>
+            <span>1 - 10 Desember 2026</span>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-bold uppercase text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md">Kesiswaan</span>
+            <i data-lucide="calendar" class="w-5 h-5 text-slate-400"></i>
+          </div>
+          <h4 class="font-bold text-slate-900 text-base mb-2">Classmeeting & Porseni</h4>
+          <p class="text-xs text-slate-500 mb-4">Kompetisi antarkelas olahraga, seni, dan e-sport.</p>
+          <div class="text-xs font-semibold text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-100 flex items-center gap-2">
+            <i data-lucide="clock" class="w-4 h-4 text-emerald-600"></i>
+            <span>14 - 18 Desember 2026</span>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-bold uppercase text-amber-600 bg-amber-50 px-2.5 py-1 rounded-md">Rapor & Libur</span>
+            <i data-lucide="calendar" class="w-5 h-5 text-slate-400"></i>
+          </div>
+          <h4 class="font-bold text-slate-900 text-base mb-2">Pembagian Rapor Semester 1</h4>
+          <p class="text-xs text-slate-500 mb-4">Penyerahan hasil evaluasi belajar kepada orang tua.</p>
+          <div class="text-xs font-semibold text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-100 flex items-center gap-2">
+            <i data-lucide="clock" class="w-4 h-4 text-amber-600"></i>
+            <span>22 Desember 2026</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EKSTRAKURIKULER INTERAKTIF -->
+  <section id="ekskul" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+        <span class="text-brand-600 text-xs font-bold uppercase tracking-wider">Wadah Bakat Siswa</span>
+        <h2 class="text-3xl font-extrabold text-slate-900">Ekstrakurikuler & Organisasi Siswa</h2>
+        <p class="text-slate-600 text-sm">
+          Pilihan lebih dari 20 kegiatan ekstrakurikuler untuk mengasah kepemimpinan, sportivitas, dan kreativitas.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Ekskul 1 -->
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover-lift flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-blue-100 text-brand-600 flex items-center justify-center mb-4">
+              <i data-lucide="cpu" class="w-6 h-6"></i>
+            </div>
+            <h4 class="font-bold text-slate-900 text-lg">Robotik & Coding Club</h4>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              Mempelajari perakitan mikrokontroler Arduino, IoT, dasar pemodelan 3D, serta pemrograman web/aplikasi.
+            </p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+            <span>📅 Sabtu, 09.00 WIB</span>
+            <span class="font-semibold text-brand-600">Lab Komputer</span>
+          </div>
+        </div>
+
+        <!-- Ekskul 2 -->
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover-lift flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4">
+              <i data-lucide="microscope" class="w-6 h-6"></i>
+            </div>
+            <h4 class="font-bold text-slate-900 text-lg">KIR (Karya Ilmiah Remaja)</h4>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              Pembimbingan riset ilmiah bidang sains murni dan humaniora untuk kompetisi tingkat nasional LKIR LIPI / BRIN.
+            </p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+            <span>📅 Rabu, 15.30 WIB</span>
+            <span class="font-semibold text-emerald-600">Lab Sains</span>
+          </div>
+        </div>
+
+        <!-- Ekskul 3 -->
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover-lift flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-4">
+              <i data-lucide="flag" class="w-6 h-6"></i>
+            </div>
+            <h4 class="font-bold text-slate-900 text-lg">Paskibra Satya Bangsa</h4>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              Pelatihan disiplin baris berbaris tingkat tinggi, ketahanan fisik, kepemimpinan, dan seleksi pengibar bendera kota.
+            </p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+            <span>📅 Selasa & Kamis, 16.00</span>
+            <span class="font-semibold text-amber-600">Lapangan Utama</span>
+          </div>
+        </div>
+
+        <!-- Ekskul 4 -->
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover-lift flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center mb-4">
+              <i data-lucide="heart-pulse" class="w-6 h-6"></i>
+            </div>
+            <h4 class="font-bold text-slate-900 text-lg">PMR Wira (Palang Merah Remaja)</h4>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              Edukasi pertolongan pertama pada kecelakaan (P3K), kesiapsiagaan bencana, dan aksi donor darah rutin.
+            </p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+            <span>📅 Jumat, 14.00 WIB</span>
+            <span class="font-semibold text-rose-600">Ruang UKS</span>
+          </div>
+        </div>
+
+        <!-- Ekskul 5 -->
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover-lift flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-4">
+              <i data-lucide="music" class="w-6 h-6"></i>
+            </div>
+            <h4 class="font-bold text-slate-900 text-lg">Paduan Suara & Musik Orkestra</h4>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              Pelatihan vokal harmoni, instrumen musik modern & tradisional, serta penampilan rutin di upacara dan konser tahunan.
+            </p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+            <span>📅 Sabtu, 10.00 WIB</span>
+            <span class="font-semibold text-purple-600">Ruang Musik</span>
+          </div>
+        </div>
+
+        <!-- Ekskul 6 -->
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover-lift flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center mb-4">
+              <i data-lucide="dribbble" class="w-6 h-6"></i>
+            </div>
+            <h4 class="font-bold text-slate-900 text-lg">Basket & Futsal Club</h4>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              Pembinaan taktik, teknik tanding, dan keikutsertaan dalam liga turnamen DBL dan turnamen futsal antar-SMA.
+            </p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+            <span>📅 Senin & Rabu, 16.00</span>
+            <span class="font-semibold text-orange-600">Sport Hall</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-300 pt-16 pb-8 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-slate-800">
+        <div class="lg:col-span-4 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold">
+              <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <span class="block text-base font-bold text-white tracking-tight leading-none">SMA NEGERI 1</span>
+              <span class="text-xs font-semibold text-brand-400 tracking-wider uppercase">Harapan Bangsa</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Mewujudkan insan yang beriman, bertaqwa, berakhlak mulia, unggul dalam ilmu pengetahuan dan teknologi, serta berdaya saing global.
+          </p>
+        </div>
+        <div class="lg:col-span-2 space-y-3">
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider">Navigasi</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="index.html" class="hover:text-white transition-colors">Beranda</a></li>
+            <li><a href="profil.html" class="hover:text-white transition-colors">Profil Sekolah</a></li>
+            <li><a href="akademik.html" class="hover:text-white transition-colors">Akademik</a></li>
+            <li><a href="berita.html" class="hover:text-white transition-colors">Berita & Agenda</a></li>
+            <li><a href="galeri.html" class="hover:text-white transition-colors">Galeri</a></li>
+            <li><a href="kontak.html" class="hover:text-white transition-colors">Kontak</a></li>
+          </ul>
+        </div>
+        <div class="lg:col-span-3 space-y-3">
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider">Layanan</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="ppdb.html" class="hover:text-amber-400 transition-colors">Pendaftaran PPDB</a></li>
+            <li><a href="ppdb.html#status" class="hover:text-white transition-colors">Cek Status PPDB</a></li>
+            <li><a href="akademik.html#ekskul" class="hover:text-white transition-colors">Ekstrakurikuler</a></li>
+          </ul>
+        </div>
+        <div class="lg:col-span-3 space-y-3">
+          <h4 class="text-sm font-bold text-white uppercase tracking-wider">Kontak & Lokasi</h4>
+          <div class="space-y-2 text-xs text-slate-400">
+            <p class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-amber-400"></i> Jl. Pendidikan No. 45, Harapan Jaya</p>
+            <p class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-amber-400"></i> (021) 8899-7766</p>
+            <p class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-amber-400"></i> info@sman1harapan.sch.id</p>
+          </div>
+        </div>
+      </div>
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <p>© 2026 SMA Negeri 1 Harapan Bangsa. Hak Cipta Dilindungi Undang-Undang.</p>
+        <p>Dirancang untuk Pendidikan Masa Depan Berkarakter.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button id="scrollTopBtn" class="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-brand-600 text-white shadow-xl hover:bg-brand-700 transition-all opacity-0 invisible" aria-label="Kembali ke atas">
+    <i data-lucide="arrow-up" class="w-5 h-5"></i>
+  </button>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
