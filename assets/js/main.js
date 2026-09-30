@@ -1,5 +1,5 @@
 /**
- * Main JavaScript File for SMA Negeri 1 Harapan Bangsa Website
+ * Main JavaScript File for SMA Negeri 1 Bengkayang Website
  */
 
 document.addEventListener('DOMContentLoaded', () => {

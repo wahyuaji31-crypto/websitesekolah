@@ -1,6 +1,6 @@
-# Website Sekolah SMA Negeri 1 Harapan Bangsa
+# Website Sekolah SMA Negeri 1 Bengkayang
 
-Website profil dan sistem informasi resmi SMA Negeri 1 Harapan Bangsa yang modern, elegan, cepat, dan sepenuhnya responsif (Desktop, Tablet, Mobile).
+Website profil dan sistem informasi resmi SMA Negeri 1 Bengkayang yang modern, elegan, cepat, dan sepenuhnya responsif (Desktop, Tablet, Mobile).
 
 ## 🌟 Fitur Utama
 
