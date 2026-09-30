@@ -139,7 +139,7 @@ function renderDynamicEkskul() {
       </div>
       <div class="mt-5 pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
         <span>📅 ${e.schedule || 'Terjadwal'}</span>
-        <span class="font-semibold text-brand-600">${e.location || 'Kampus'}</span>
+        <span class="font-semibold text-brand-600">${e.location || 'Sekolah'}</span>
       </div>
     `;
     container.appendChild(card);

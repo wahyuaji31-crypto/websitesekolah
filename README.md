@@ -5,7 +5,8 @@ Website profil dan sistem informasi resmi SMA Negeri 1 Bengkayang yang modern, e
 ## 🌟 Fitur Utama
 
 - 🏠 **Beranda (Home)**: Hero slider interaktif, statistik sekolah animasi, sambutan Kepala Sekolah, program peminatan Kurikulum Merdeka, berita terkini, dan testimoni alumni.
-- 🏫 **Profil Sekolah**: Sejarah, Visi & Misi 2030, struktur pimpinan, dewan guru & tenaga pendidik, serta sarana & prasarana kampus.
+- 🏫 **Profil Sekolah**: Sejarah, Visi & Misi 2030, struktur pimpinan, dewan guru & tenaga pendidik, serta sarana & prasarana sekolah.
+- 💻 **E-Learning LMS**: Portal pembelajaran digital terpadu, modul materi, video interaktif, dan simulasi CBT online.
 - 📚 **Akademik & Kesiswaan**: Struktur Kurikulum Merdeka, kalender akademik tahunan, 6 Dimensi Profil Pelajar Pancasila, dan direktori ekstrakurikuler.
 - 📰 **Berita & Pengumuman**: Filter artikel berdasarkan kategori (*Prestasi, Pengumuman, Kesiswaan, Akademik*), pencarian cepat, dan popup modal pembaca berita.
 - 📸 **Galeri Multimedia**: Dokumentasi foto kegiatan dengan filter kategori dan Lightbox zoom interaktif.

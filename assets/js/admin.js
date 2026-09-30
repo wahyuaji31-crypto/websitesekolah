@@ -560,7 +560,7 @@ function deleteGallery(index) {
 }
 
 // -------------------------------------------------------------
-// 6. FASILITAS KAMPUS CRUD
+// 6. FASILITAS SEKOLAH CRUD
 // -------------------------------------------------------------
 function renderAdminFacilities() {
   const container = document.getElementById('adminFacilitiesList');
