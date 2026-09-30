@@ -109,6 +109,34 @@ const DEFAULT_MESSAGES = [
   }
 ];
 
+const DEFAULT_LMS_SETTINGS = {
+  serverStatus: 'Aktif',
+  demoLogin: 'Buka',
+  announcement: 'Selamat datang di E-Learning SMAN 1 Bengkayang. Akses modul dan ujian CBT tepat waktu.',
+  defaultMeetUrl: 'https://meet.google.com/abc-defg-hij'
+};
+
+const DEFAULT_LIVE_CLASSES = [
+  { id: 1, subject: 'Fisika Quantum & Relativitas', teacher: 'Agus Salim, M.Si.', grade: 'XI MIPA 1', schedule: '13.30 - 15.00 WIB (Zoom Room 1)', status: 'SEDANG BERLANGSUNG' },
+  { id: 2, subject: 'Koding Dasar Python & Web', teacher: 'Fajar Nugraha, S.Kom.', grade: 'X Fase E-2', schedule: '15.30 - 17.00 WIB (Google Meet)', status: 'AKAN DATANG' },
+  { id: 3, subject: 'Ekonomi Makro & Pasar Modal', teacher: 'Dra. Siti Wahyuni', grade: 'XII IPS 2', schedule: 'Kamis, 08.00 - 09.30 WIB', status: 'AKAN DATANG' }
+];
+
+const DEFAULT_COURSES = [
+  { id: 1, name: 'Matematika Tingkat Lanjut', category: 'sains', catLabel: 'MIPA', modules: '12 Bab Modul', teacher: 'Ratna Sari, S.Pd.', desc: 'Kalkulus diferensial, integral, dan aljabar matriks.', progress: 85, icon: 'calculator' },
+  { id: 2, name: 'Fisika Gelombang & Listrik', category: 'sains', catLabel: 'MIPA', modules: '10 Bab Modul', teacher: 'Agus Salim, M.Si.', desc: 'Termodinamika, gelombang elektromagnetik, dan induksi.', progress: 70, icon: 'atom' },
+  { id: 3, name: 'Kimia Organik & Polimer', category: 'sains', catLabel: 'MIPA', modules: '8 Bab Modul', teacher: 'Dewi Lestari, S.Pd.', desc: 'Senyawa karbon, reaksi substitusi, dan polimerisasi.', progress: 90, icon: 'flask-conical' },
+  { id: 4, name: 'Pemrograman Web & IoT', category: 'it', catLabel: 'Informatika', modules: '14 Modul', teacher: 'Fajar Nugraha, S.Kom.', desc: 'HTML5, CSS3, JavaScript modern, dan sensor Arduino.', progress: 95, icon: 'code-2' },
+  { id: 5, name: 'English for Academic Purpose', category: 'bahasa', catLabel: 'Bahasa', modules: '10 Modul', teacher: 'Sarah Johnson, B.Ed.', desc: 'TOEFL preparation, academic writing, and public speaking.', progress: 80, icon: 'languages' },
+  { id: 6, name: 'Sosiologi & Dinamika Masyarakat', category: 'sosial', catLabel: 'Sosial', modules: '9 Modul', teacher: 'Budi Santoso, M.Pd.', desc: 'Interaksi sosial, struktur kemasyarakatan, dan resolusi konflik.', progress: 65, icon: 'landmark' }
+];
+
+const DEFAULT_CBT = [
+  { id: 1, title: 'Simulasi PTS Matematika & Logika', desc: '40 Soal pilihan ganda & 5 soal esai analitis HOTS tingkat SMA.', duration: 90, questions: 45, badge: 'AKTIF', deadline: '28 Oktober 2026' },
+  { id: 2, title: 'Try Out OSN Sains & Biologi', desc: 'Soal standar Olimpiade Sains Nasional bidang Biologi molekuler.', duration: 60, questions: 30, badge: 'LATIHAN MANDIRI', deadline: 'Terbuka Umum' },
+  { id: 3, title: 'Kuis Interaktif Algoritma & Coding', desc: 'Uji pemahaman dasar logika percabangan, perulangan & data struktur.', duration: 45, questions: 25, badge: 'KOMPETENSI IT', deadline: 'Live Leaderboard' }
+];
+
 const DEFAULT_WEB_SETTINGS = {
   schoolName: 'SMA Negeri 1 Bengkayang',
   schoolShortName: 'SMAN 1 Bengkayang',
@@ -149,6 +177,10 @@ let teachersList = [];
 let galleryList = [];
 let facilitiesList = [];
 let messagesList = [];
+let liveClassList = [];
+let coursesList = [];
+let cbtList = [];
+let lmsSettings = DEFAULT_LMS_SETTINGS;
 
 function loadData() {
   ppdbList = JSON.parse(localStorage.getItem('ppdb_registrations')) || DEFAULT_PPDB_DATA;
@@ -158,6 +190,10 @@ function loadData() {
   galleryList = JSON.parse(localStorage.getItem('school_gallery_data')) || DEFAULT_GALLERY_DATA;
   facilitiesList = JSON.parse(localStorage.getItem('school_facilities_data')) || DEFAULT_FACILITIES_DATA;
   messagesList = JSON.parse(localStorage.getItem('school_messages')) || DEFAULT_MESSAGES;
+  liveClassList = JSON.parse(localStorage.getItem('school_live_classes')) || DEFAULT_LIVE_CLASSES;
+  coursesList = JSON.parse(localStorage.getItem('school_courses_data')) || DEFAULT_COURSES;
+  cbtList = JSON.parse(localStorage.getItem('school_cbt_data')) || DEFAULT_CBT;
+  lmsSettings = JSON.parse(localStorage.getItem('school_lms_settings')) || DEFAULT_LMS_SETTINGS;
 
   // Persist defaults
   localStorage.setItem('school_agenda_data', JSON.stringify(agendaList));
@@ -165,6 +201,10 @@ function loadData() {
   localStorage.setItem('school_teachers_data', JSON.stringify(teachersList));
   localStorage.setItem('school_gallery_data', JSON.stringify(galleryList));
   localStorage.setItem('school_facilities_data', JSON.stringify(facilitiesList));
+  localStorage.setItem('school_live_classes', JSON.stringify(liveClassList));
+  localStorage.setItem('school_courses_data', JSON.stringify(coursesList));
+  localStorage.setItem('school_cbt_data', JSON.stringify(cbtList));
+  localStorage.setItem('school_lms_settings', JSON.stringify(lmsSettings));
 }
 
 // -------------------------------------------------------------
@@ -680,7 +720,192 @@ function resetWebSettings() {
 }
 
 // -------------------------------------------------------------
-// 8. PESAN MASUK & STATS
+// 8. E-LEARNING (LMS) MANAGEMENT CRUD
+// -------------------------------------------------------------
+function loadLmsSettings() {
+  const saved = localStorage.getItem('school_lms_settings');
+  const s = saved ? JSON.parse(saved) : DEFAULT_LMS_SETTINGS;
+  const setVal = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val || '';
+  };
+  setVal('lmsServerStatus', s.serverStatus || 'Aktif');
+  setVal('lmsDemoLogin', s.demoLogin || 'Buka');
+  setVal('lmsAnnouncement', s.announcement || '');
+}
+
+function handleSaveLmsSettings(e) {
+  if (e) e.preventDefault();
+  const updatedLms = {
+    serverStatus: document.getElementById('lmsServerStatus') ? document.getElementById('lmsServerStatus').value : 'Aktif',
+    demoLogin: document.getElementById('lmsDemoLogin') ? document.getElementById('lmsDemoLogin').value : 'Buka',
+    announcement: document.getElementById('lmsAnnouncement') ? document.getElementById('lmsAnnouncement').value.trim() : ''
+  };
+  localStorage.setItem('school_lms_settings', JSON.stringify(updatedLms));
+  if (window.showToast) window.showToast('Pengaturan Server E-Learning berhasil disimpan!', 'success');
+}
+
+// Live Classes
+function renderAdminLiveClasses() {
+  const container = document.getElementById('adminLiveClassList');
+  if (!container) return;
+  container.innerHTML = '';
+
+  liveClassList.forEach((lc, index) => {
+    const card = document.createElement('div');
+    card.className = 'p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between text-xs';
+    card.innerHTML = `
+      <div>
+        <div class="flex items-center gap-1.5 mb-1">
+          <span class="px-2 py-0.5 rounded text-[9px] font-bold ${lc.status === 'SEDANG BERLANGSUNG' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'}">${lc.status}</span>
+          <span class="font-bold text-slate-900">${lc.subject}</span>
+        </div>
+        <p class="text-[11px] text-slate-500">${lc.teacher} • ${lc.grade} • ${lc.schedule}</p>
+      </div>
+      <button onclick="deleteLiveClass(${index})" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 text-[10px] font-bold hover:bg-rose-100 transition-colors">Hapus</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function handleSaveLiveClass(e) {
+  e.preventDefault();
+  const newClass = {
+    id: Date.now(),
+    subject: document.getElementById('liveSubject').value.trim(),
+    teacher: document.getElementById('liveTeacher').value.trim(),
+    grade: document.getElementById('liveGrade').value.trim(),
+    schedule: document.getElementById('liveSchedule').value.trim(),
+    status: document.getElementById('liveStatus').value
+  };
+  liveClassList.push(newClass);
+  localStorage.setItem('school_live_classes', JSON.stringify(liveClassList));
+  renderAdminLiveClasses();
+  e.target.reset();
+  if (window.showToast) window.showToast('Jadwal Live Class berhasil ditambahkan!', 'success');
+}
+
+function deleteLiveClass(index) {
+  if (confirm('Hapus jadwal live class ini?')) {
+    liveClassList.splice(index, 1);
+    localStorage.setItem('school_live_classes', JSON.stringify(liveClassList));
+    renderAdminLiveClasses();
+    if (window.showToast) window.showToast('Jadwal Live Class dihapus', 'success');
+  }
+}
+
+// Courses & Modules
+function renderAdminCourses() {
+  const container = document.getElementById('adminCoursesList');
+  if (!container) return;
+  container.innerHTML = '';
+
+  coursesList.forEach((c, index) => {
+    const card = document.createElement('div');
+    card.className = 'p-3 rounded-xl border border-slate-200 bg-white flex flex-col justify-between text-xs';
+    card.innerHTML = `
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-purple-50 text-purple-700 uppercase">${c.category}</span>
+          <span class="text-[10px] text-slate-400">${c.modules}</span>
+        </div>
+        <h5 class="font-bold text-slate-900 text-xs">${c.name}</h5>
+        <p class="text-[10px] text-slate-500 mt-0.5">Pengampu: ${c.teacher}</p>
+        <p class="text-[11px] text-slate-600 mt-1 line-clamp-2">${c.desc}</p>
+      </div>
+      <div class="pt-2 mt-2 border-t border-slate-100 flex justify-end">
+        <button onclick="deleteCourse(${index})" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 text-[10px] font-bold hover:bg-rose-100 transition-colors">Hapus</button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function handleSaveCourse(e) {
+  e.preventDefault();
+  const cat = document.getElementById('courseCategory').value;
+  const labels = { sains: 'MIPA', sosial: 'Sosial', bahasa: 'Bahasa', it: 'Informatika' };
+  const icons = { sains: 'calculator', sosial: 'landmark', bahasa: 'languages', it: 'code-2' };
+
+  const newCourse = {
+    id: Date.now(),
+    name: document.getElementById('courseName').value.trim(),
+    category: cat,
+    catLabel: labels[cat] || 'Umum',
+    modules: document.getElementById('courseModules').value.trim(),
+    teacher: document.getElementById('courseTeacher').value.trim(),
+    desc: document.getElementById('courseDesc').value.trim(),
+    progress: 100,
+    icon: icons[cat] || 'book-open'
+  };
+  coursesList.push(newCourse);
+  localStorage.setItem('school_courses_data', JSON.stringify(coursesList));
+  renderAdminCourses();
+  e.target.reset();
+  if (window.showToast) window.showToast('Mata Pelajaran E-Learning berhasil ditambahkan!', 'success');
+}
+
+function deleteCourse(index) {
+  if (confirm('Hapus mata pelajaran ini dari E-Learning?')) {
+    coursesList.splice(index, 1);
+    localStorage.setItem('school_courses_data', JSON.stringify(coursesList));
+    renderAdminCourses();
+    if (window.showToast) window.showToast('Mata pelajaran dihapus', 'success');
+  }
+}
+
+// CBT Online Exams
+function renderAdminCbt() {
+  const container = document.getElementById('adminCbtList');
+  if (!container) return;
+  container.innerHTML = '';
+
+  cbtList.forEach((cbt, index) => {
+    const card = document.createElement('div');
+    card.className = 'p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between text-xs';
+    card.innerHTML = `
+      <div>
+        <div class="flex items-center gap-1.5 mb-1">
+          <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800">${cbt.badge || 'CBT'}</span>
+          <span class="font-bold text-slate-900">${cbt.title}</span>
+        </div>
+        <p class="text-[11px] text-slate-500">${cbt.duration} Menit • ${cbt.questions} Soal • Batas: ${cbt.deadline || 'Sesuai Jadwal'}</p>
+      </div>
+      <button onclick="deleteCbt(${index})" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 text-[10px] font-bold hover:bg-rose-100 transition-colors">Hapus</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function handleSaveCbt(e) {
+  e.preventDefault();
+  const newCbt = {
+    id: Date.now(),
+    title: document.getElementById('cbtTitle').value.trim(),
+    desc: document.getElementById('cbtDesc').value.trim(),
+    duration: +document.getElementById('cbtDuration').value || 60,
+    questions: +document.getElementById('cbtQuestions').value || 30,
+    badge: document.getElementById('cbtBadge').value,
+    deadline: document.getElementById('cbtDeadline').value.trim() || 'Sesuai Jadwal'
+  };
+  cbtList.push(newCbt);
+  localStorage.setItem('school_cbt_data', JSON.stringify(cbtList));
+  renderAdminCbt();
+  e.target.reset();
+  if (window.showToast) window.showToast('Jadwal Ujian CBT berhasil ditambahkan!', 'success');
+}
+
+function deleteCbt(index) {
+  if (confirm('Hapus jadwal ujian CBT ini?')) {
+    cbtList.splice(index, 1);
+    localStorage.setItem('school_cbt_data', JSON.stringify(cbtList));
+    renderAdminCbt();
+    if (window.showToast) window.showToast('Jadwal CBT dihapus', 'success');
+  }
+}
+
+// -------------------------------------------------------------
+// 9. PESAN MASUK & STATS
 // -------------------------------------------------------------
 function renderMessages() {
   const container = document.getElementById('messagesContainer');
@@ -743,6 +968,10 @@ document.addEventListener('DOMContentLoaded', () => {
   renderAdminTeachers();
   renderAdminGallery();
   renderAdminFacilities();
+  renderAdminLiveClasses();
+  renderAdminCourses();
+  renderAdminCbt();
+  loadLmsSettings();
   renderMessages();
   loadWebSettings();
 

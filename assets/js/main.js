@@ -226,6 +226,135 @@ function renderDynamicGallery() {
   });
 }
 
+const DEFAULT_LIVE_CLASSES_MAIN = [
+  { id: 1, subject: 'Fisika Quantum & Relativitas', teacher: 'Agus Salim, M.Si.', grade: 'XI MIPA 1', schedule: '13.30 - 15.00 WIB (Zoom Room 1)', status: 'SEDANG BERLANGSUNG' },
+  { id: 2, subject: 'Koding Dasar Python & Web', teacher: 'Fajar Nugraha, S.Kom.', grade: 'X Fase E-2', schedule: '15.30 - 17.00 WIB (Google Meet)', status: 'AKAN DATANG' },
+  { id: 3, subject: 'Ekonomi Makro & Pasar Modal', teacher: 'Dra. Siti Wahyuni', grade: 'XII IPS 2', schedule: 'Kamis, 08.00 - 09.30 WIB', status: 'AKAN DATANG' }
+];
+
+const DEFAULT_COURSES_MAIN = [
+  { id: 1, name: 'Matematika Tingkat Lanjut', category: 'sains', catLabel: 'MIPA', modules: '12 Bab Modul', teacher: 'Ratna Sari, S.Pd.', desc: 'Kalkulus diferensial, integral, dan aljabar matriks.', progress: 85, icon: 'calculator' },
+  { id: 2, name: 'Fisika Gelombang & Listrik', category: 'sains', catLabel: 'MIPA', modules: '10 Bab Modul', teacher: 'Agus Salim, M.Si.', desc: 'Termodinamika, gelombang elektromagnetik, dan induksi.', progress: 70, icon: 'atom' },
+  { id: 3, name: 'Kimia Organik & Polimer', category: 'sains', catLabel: 'MIPA', modules: '8 Bab Modul', teacher: 'Dewi Lestari, S.Pd.', desc: 'Senyawa karbon, reaksi substitusi, dan polimerisasi.', progress: 90, icon: 'flask-conical' },
+  { id: 4, name: 'Pemrograman Web & IoT', category: 'it', catLabel: 'Informatika', modules: '14 Modul', teacher: 'Fajar Nugraha, S.Kom.', desc: 'HTML5, CSS3, JavaScript modern, dan sensor Arduino.', progress: 95, icon: 'code-2' },
+  { id: 5, name: 'English for Academic Purpose', category: 'bahasa', catLabel: 'Bahasa', modules: '10 Modul', teacher: 'Sarah Johnson, B.Ed.', desc: 'TOEFL preparation, academic writing, and public speaking.', progress: 80, icon: 'languages' },
+  { id: 6, name: 'Sosiologi & Dinamika Masyarakat', category: 'sosial', catLabel: 'Sosial', modules: '9 Modul', teacher: 'Budi Santoso, M.Pd.', desc: 'Interaksi sosial, struktur kemasyarakatan, dan resolusi konflik.', progress: 65, icon: 'landmark' }
+];
+
+const DEFAULT_CBT_MAIN = [
+  { id: 1, title: 'Simulasi PTS Matematika & Logika', desc: '40 Soal pilihan ganda & 5 soal esai analitis HOTS tingkat SMA.', duration: 90, questions: 45, badge: 'AKTIF', deadline: '28 Oktober 2026' },
+  { id: 2, title: 'Try Out OSN Sains & Biologi', desc: 'Soal standar Olimpiade Sains Nasional bidang Biologi molekuler.', duration: 60, questions: 30, badge: 'LATIHAN MANDIRI', deadline: 'Terbuka Umum' },
+  { id: 3, title: 'Kuis Interaktif Algoritma & Coding', desc: 'Uji pemahaman dasar logika percabangan, perulangan & data struktur.', duration: 45, questions: 25, badge: 'KOMPETENSI IT', deadline: 'Live Leaderboard' }
+];
+
+// Render Dynamic Live Classes (E-Learning Page)
+function renderDynamicLiveClasses() {
+  const container = document.getElementById('dynamicLiveClassesContainer');
+  if (!container) return;
+
+  const data = JSON.parse(localStorage.getItem('school_live_classes')) || DEFAULT_LIVE_CLASSES_MAIN;
+  container.innerHTML = '';
+
+  data.forEach(lc => {
+    const isLive = lc.status === 'SEDANG BERLANGSUNG';
+    const card = document.createElement('div');
+    card.className = isLive 
+      ? 'p-6 rounded-2xl bg-gradient-to-br from-brand-900 to-indigo-950 text-white shadow-lg flex flex-col justify-between'
+      : 'p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between hover-lift';
+
+    card.innerHTML = `
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <span class="px-2.5 py-1 rounded-md text-[10px] font-bold ${isLive ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30' : 'bg-slate-100 text-slate-700'}">${lc.status}</span>
+          <span class="text-xs ${isLive ? 'text-slate-300' : 'text-slate-500'}">${lc.grade}</span>
+        </div>
+        <h4 class="font-bold text-lg ${isLive ? 'text-white' : 'text-slate-900'} mb-1">${lc.subject}</h4>
+        <p class="text-xs ${isLive ? 'text-slate-300' : 'text-slate-600'} mb-4">Pengajar: ${lc.teacher}</p>
+        <div class="flex items-center gap-2 text-xs ${isLive ? 'text-amber-300 bg-white/10' : 'text-slate-700 bg-slate-50'} p-2.5 rounded-xl mb-4">
+          <i data-lucide="clock" class="w-4 h-4 ${isLive ? '' : 'text-brand-600'}"></i>
+          <span>${lc.schedule}</span>
+        </div>
+      </div>
+      <button onclick="openLiveClassModal('${lc.subject}', '${lc.teacher}', '${lc.grade}')" class="w-full py-2.5 rounded-xl ${isLive ? 'bg-emerald-500 hover:bg-emerald-600 text-slate-950' : 'bg-brand-600 hover:bg-brand-700 text-white'} font-bold text-xs shadow transition-all flex items-center justify-center gap-2">
+        <i data-lucide="video" class="w-4 h-4"></i> ${isLive ? 'Gabung Live Class' : 'Siapkan Tautan Kelas'}
+      </button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// Render Dynamic Courses (E-Learning Page)
+function renderDynamicCourses() {
+  const container = document.getElementById('coursesGrid');
+  if (!container) return;
+
+  const data = JSON.parse(localStorage.getItem('school_courses_data')) || DEFAULT_COURSES_MAIN;
+  container.innerHTML = '';
+
+  data.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'course-card bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 hover-lift flex flex-col justify-between';
+    card.setAttribute('data-category', c.category || 'sains');
+    card.innerHTML = `
+      <div>
+        <div class="w-12 h-12 rounded-xl bg-blue-100 text-brand-600 flex items-center justify-center mb-4 font-black">
+          <i data-lucide="${c.icon || 'book-open'}" class="w-6 h-6"></i>
+        </div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 uppercase">${c.catLabel || c.category}</span>
+          <span class="text-[10px] text-slate-400">${c.modules}</span>
+        </div>
+        <h4 class="font-bold text-slate-900 text-base">${c.name}</h4>
+        <p class="text-xs text-slate-500 mt-1">${c.desc}</p>
+        <p class="text-xs font-semibold text-slate-700 mt-3 flex items-center gap-1.5">
+          <i data-lucide="user-check" class="w-3.5 h-3.5 text-brand-600"></i> ${c.teacher}
+        </p>
+      </div>
+      <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
+        <span class="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
+          <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Progres: ${c.progress || 80}%
+        </span>
+        <button onclick="openCourseModal('${c.name}', '${c.teacher}', '${c.modules}')" class="text-xs font-bold text-brand-600 hover:text-brand-800 flex items-center gap-1">
+          Buka <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// Render Dynamic CBT Exams (E-Learning Page)
+function renderDynamicCbt() {
+  const container = document.getElementById('dynamicCbtContainer');
+  if (!container) return;
+
+  const data = JSON.parse(localStorage.getItem('school_cbt_data')) || DEFAULT_CBT_MAIN;
+  container.innerHTML = '';
+
+  data.forEach(cbt => {
+    const card = document.createElement('div');
+    card.className = 'p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm flex flex-col justify-between hover-lift';
+    card.innerHTML = `
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <span class="px-2.5 py-1 rounded text-[10px] font-bold bg-amber-100 text-amber-800">${cbt.badge || 'CBT'}</span>
+          <span class="text-xs text-slate-500">Durasi: ${cbt.duration} Menit</span>
+        </div>
+        <h4 class="font-bold text-slate-900 text-base mb-2">${cbt.title}</h4>
+        <p class="text-xs text-slate-600 mb-4">${cbt.desc}</p>
+        <div class="space-y-1 text-[11px] text-slate-500 mb-4">
+          <p>📅 Batas Akhir: ${cbt.deadline || 'Sesuai Kalender'}</p>
+          <p>🎯 Jumlah Soal: ${cbt.questions} Butir</p>
+        </div>
+      </div>
+      <button onclick="startCbtExam('${cbt.title}', ${cbt.duration}, ${cbt.questions})" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow transition-all flex items-center justify-center gap-2">
+        <i data-lucide="play" class="w-4 h-4"></i> Mulai Ujian CBT
+      </button>
+    `;
+    container.appendChild(card);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   applyWebSettings();
   renderDynamicTeachers();
@@ -233,6 +362,9 @@ document.addEventListener('DOMContentLoaded', () => {
   renderDynamicAgenda();
   renderDynamicFacilities();
   renderDynamicGallery();
+  renderDynamicLiveClasses();
+  renderDynamicCourses();
+  renderDynamicCbt();
 
   if (typeof lucide !== 'undefined') {
     lucide.createIcons();
