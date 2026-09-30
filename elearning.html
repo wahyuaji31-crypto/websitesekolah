@@ -211,63 +211,10 @@
           </div>
         </div>
 
-        <!-- LOGIN / QUICK ACCESS CARD -->
+        <!-- LOGIN / ACTIVE LMS DASHBOARD CARD -->
         <div class="lg:col-span-5" id="loginSection">
-          <div class="bg-white rounded-3xl p-6 sm:p-8 text-slate-800 shadow-2xl border border-slate-100">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
-              <div>
-                <h3 class="font-extrabold text-slate-900 text-lg">Masuk LMS Siswa / Guru</h3>
-                <p class="text-xs text-slate-500">Gunakan NISN atau NIP terdaftar</p>
-              </div>
-              <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
-                <i data-lucide="key" class="w-5 h-5"></i>
-              </div>
-            </div>
-
-            <!-- Role Selector -->
-            <div class="flex rounded-xl bg-slate-100 p-1 mb-5">
-              <button id="roleStudentBtn" onclick="switchRole('student')" class="flex-1 py-2 text-xs font-bold rounded-lg bg-white shadow-sm text-brand-600 transition-all">
-                👨‍🎓 Siswa
-              </button>
-              <button id="roleTeacherBtn" onclick="switchRole('teacher')" class="flex-1 py-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition-all">
-                👩‍🏫 Guru / Pengajar
-              </button>
-            </div>
-
-            <form onsubmit="handleLmsLogin(event)" class="space-y-4">
-              <div>
-                <label id="loginIdLabel" class="block text-xs font-bold text-slate-700 mb-1">Nomor Induk Siswa Nasional (NISN)</label>
-                <div class="relative">
-                  <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-                  <input type="text" id="lmsUsername" required placeholder="Contoh: 0076543210" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
-                </div>
-              </div>
-
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">Kata Sandi</label>
-                <div class="relative">
-                  <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-                  <input type="password" id="lmsPassword" required placeholder="••••••••" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
-                </div>
-              </div>
-
-              <div class="flex items-center justify-between text-xs">
-                <label class="flex items-center gap-2 cursor-pointer text-slate-600">
-                  <input type="checkbox" checked class="rounded border-slate-300 text-brand-600 focus:ring-brand-500">
-                  <span>Ingat Sesi Saya</span>
-                </label>
-                <a href="javascript:void(0)" onclick="alert('Silakan hubungi staf IT / Tata Usaha SMAN 1 Bengkayang untuk reset password akun E-Learning.')" class="text-brand-600 hover:underline font-semibold">Lupa Password?</a>
-              </div>
-
-              <button type="submit" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2">
-                <i data-lucide="log-in" class="w-4 h-4"></i> Masuk Ruang Belajar
-              </button>
-            </form>
-
-            <div class="mt-5 p-3 rounded-xl bg-brand-50/70 border border-brand-100 flex items-start gap-2.5 text-[11px] text-brand-900">
-              <i data-lucide="info" class="w-4 h-4 text-brand-600 flex-shrink-0 mt-0.5"></i>
-              <span>Gunakan akun resmi yang diberikan saat awal tahun ajaran. Belum punya akun? Hubungi wali kelas masing-masing.</span>
-            </div>
+          <div id="lmsAuthContainer" class="bg-white rounded-3xl p-6 sm:p-8 text-slate-800 shadow-2xl border border-slate-100 transition-all">
+            <!-- Dynamic Form or Dashboard injected via JS -->
           </div>
         </div>
 
@@ -661,9 +608,227 @@
         </div>
       </div>
 
-      <button onclick="closeCourseModal()" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-all">
-        Tutup Jendela
-      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 1: LMS USER CONTROL (FOR LMS ADMIN & TEACHER VIEW) -->
+  <div id="elearningUserControlModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto space-y-6 shadow-2xl border border-slate-100">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-extrabold text-slate-900">User Control & Manajemen Akun LMS</h3>
+            <p class="text-xs text-slate-500">Kelola kredensial Guru, Siswa, dan Administrator portal E-Learning.</p>
+          </div>
+        </div>
+        <button onclick="closeLmsUserModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-6">
+        <!-- Tambah User Baru -->
+        <div class="lg:col-span-5 bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4">
+          <h4 class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+            <i data-lucide="user-plus" class="w-4 h-4 text-purple-600"></i> Tambah Pengguna Baru
+          </h4>
+          <form onsubmit="handleLmsModalAddUser(event)" class="space-y-3 text-xs">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
+              <input type="text" id="modalUserFullName" required placeholder="Nama Guru atau Siswa" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Peran Pengguna</label>
+              <select id="modalUserRole" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-semibold" onchange="const l=document.getElementById('modalUserLoginLabel'); l.textContent = this.value==='student'?'NISN (ID Login)':(this.value==='teacher'?'NIP / Akun Guru':'Username Admin');">
+                <option value="student">👨‍🎓 Siswa / Peserta Didik</option>
+                <option value="teacher">👩‍🏫 Guru / Tenaga Pendidik</option>
+                <option value="admin">🛠️ Administrator LMS</option>
+              </select>
+            </div>
+            <div>
+              <label id="modalUserLoginLabel" class="block font-semibold text-slate-700 mb-1">NISN (ID Login)</label>
+              <input type="text" id="modalUserLoginId" required placeholder="ID / Username login..." class="w-full px-3 py-2 rounded-xl border border-slate-300 font-mono">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Kata Sandi (Password)</label>
+              <input type="password" id="modalUserPassword" required value="123456" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-mono">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Email</label>
+              <input type="email" id="modalUserEmail" placeholder="email@sman1bky.sch.id" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Kelas / Mata Pelajaran</label>
+              <input type="text" id="modalUserExtra" placeholder="Contoh: XI MIPA 1 atau Fisika" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+            </div>
+            <button type="submit" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow transition-all flex items-center justify-center gap-1.5">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i> Tambahkan Akun
+            </button>
+          </form>
+        </div>
+
+        <!-- Tabel Pengguna Modal -->
+        <div class="lg:col-span-7 space-y-3">
+          <div class="flex flex-col sm:flex-row gap-2">
+            <div class="relative flex-1">
+              <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+              <input type="text" id="modalUserSearch" oninput="renderModalUserTable()" placeholder="Cari nama atau NISN/NIP..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 text-xs">
+            </div>
+            <select id="modalUserRoleFilter" onchange="renderModalUserTable()" class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold">
+              <option value="all">Semua Peran</option>
+              <option value="teacher">👩‍🏫 Guru</option>
+              <option value="student">👨‍🎓 Siswa</option>
+              <option value="admin">🛠️ Admin</option>
+            </select>
+          </div>
+
+          <div class="overflow-x-auto rounded-2xl border border-slate-200 max-h-80 overflow-y-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200">
+                  <th class="py-2.5 px-3">Nama & Peran</th>
+                  <th class="py-2.5 px-3">ID Login</th>
+                  <th class="py-2.5 px-3">Info</th>
+                  <th class="py-2.5 px-3 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="modalUsersTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2 flex justify-end">
+        <button onclick="closeLmsUserModal()" class="px-5 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 transition-all">
+          Selesai / Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: TEACHER LIVE CLASS CREATION -->
+  <div id="teacherLiveModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-5 shadow-2xl border border-slate-100">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+          <i data-lucide="video" class="w-5 h-5 text-emerald-600"></i> Jadwalkan Live Video Class Baru
+        </h3>
+        <button onclick="document.getElementById('teacherLiveModal').classList.add('hidden')" class="text-slate-400 hover:text-slate-700">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <form onsubmit="handleTeacherSaveLiveClass(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Mata Pelajaran & Topik Pertemuan</label>
+          <input type="text" id="tLiveSubject" required placeholder="Contoh: Fisika - Hukum Newton & Gravitasi" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Kelas Sasaran</label>
+            <input type="text" id="tLiveGrade" required placeholder="XI MIPA 1" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Status Sesi</label>
+            <select id="tLiveStatus" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+              <option value="SEDANG BERLANGSUNG">🔴 SEDANG BERLANGSUNG</option>
+              <option value="AKAN DATANG">📅 AKAN DATANG</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Waktu & Jadwal Pertemuan</label>
+          <input type="text" id="tLiveSchedule" required placeholder="Hari Ini, 14.00 - 15.30 WIB" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow transition-all">
+          Publikasikan Jadwal Live Class
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: TEACHER COURSE CREATION -->
+  <div id="teacherCourseAddModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-5 shadow-2xl border border-slate-100">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+          <i data-lucide="book-open" class="w-5 h-5 text-purple-600"></i> Upload Modul & Materi Baru
+        </h3>
+        <button onclick="document.getElementById('teacherCourseAddModal').classList.add('hidden')" class="text-slate-400 hover:text-slate-700">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <form onsubmit="handleTeacherSaveCourse(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Nama Mata Pelajaran / Judul Modul</label>
+          <input type="text" id="tCourseName" required placeholder="Contoh: Astronomi & Kosmologi Dasar" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Kategori</label>
+            <select id="tCourseCategory" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+              <option value="sains">MIPA & Sains</option>
+              <option value="sosial">Sosial & Humaniora</option>
+              <option value="bahasa">Bahasa & Seni</option>
+              <option value="it">Informatika / IT</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Jumlah Modul</label>
+            <input type="text" id="tCourseModules" required placeholder="8 Bab Materi" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Deskripsi Ringkas</label>
+          <textarea id="tCourseDesc" rows="3" required placeholder="Rangkuman capaian pembelajaran materi ini..." class="w-full px-3 py-2 rounded-xl border border-slate-300"></textarea>
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow transition-all">
+          Upload & Terbitkan Modul
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 4: TEACHER CBT EXAM CREATION -->
+  <div id="teacherCbtAddModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-5 shadow-2xl border border-slate-100">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+          <i data-lucide="check-square" class="w-5 h-5 text-blue-600"></i> Buat Paket Simulasi Ujian CBT
+        </h3>
+        <button onclick="document.getElementById('teacherCbtAddModal').classList.add('hidden')" class="text-slate-400 hover:text-slate-700">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <form onsubmit="handleTeacherSaveCbt(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Nama Ujian / Ulangan Online</label>
+          <input type="text" id="tCbtTitle" required placeholder="Contoh: Kuis Harian Fisika Optik" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Deskripsi Soal</label>
+          <input type="text" id="tCbtDesc" required placeholder="30 Soal pilihan ganda konsep & hitungan" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Durasi (Menit)</label>
+            <input type="number" id="tCbtDuration" required value="60" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Jumlah Butir Soal</label>
+            <input type="number" id="tCbtQuestions" required value="30" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Batas Waktu</label>
+          <input type="text" id="tCbtDeadline" placeholder="28 Oktober 2026, 23.59 WIB" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow transition-all">
+          Jadwalkan Ujian CBT
+        </button>
+      </form>
     </div>
   </div>
 
@@ -728,39 +893,456 @@
 
   <script src="assets/js/main.js"></script>
   <script>
-    let currentRole = 'student';
+    // LMS User Management & Session Handling
+    let activeRole = 'student';
+    let currentLmsUser = null;
+
+    function getLmsUsers() {
+      return JSON.parse(localStorage.getItem('elearning_users')) || (typeof DEFAULT_LMS_USERS_MAIN !== 'undefined' ? DEFAULT_LMS_USERS_MAIN : [
+        { id: 1, name: 'Dr. H. Rahmat Hidayat, M.Pd.', username: 'admin', password: 'admin123', role: 'admin', email: 'admin@sman1bky.sch.id', roleLabel: 'Super Admin LMS', info: 'Pengelola Sistem', status: 'Aktif' },
+        { id: 2, name: 'Agus Salim, M.Si.', username: '197908192005011008', password: 'guru123', role: 'teacher', email: 'agus.salim@sman1bky.sch.id', roleLabel: 'Guru Fisika', info: 'NIP. 19790819 200501 1 008', status: 'Aktif' },
+        { id: 3, name: 'Ahmad Zaki Pratama', username: '0076543210', password: 'siswa123', role: 'student', email: 'zaki@student.sman1bky.sch.id', roleLabel: 'Siswa Kelas XI MIPA 1', info: 'NISN. 0076543210', status: 'Aktif' }
+      ]);
+    }
+
+    function checkActiveLmsSession() {
+      const savedSession = localStorage.getItem('elearning_active_user');
+      if (savedSession) {
+        try {
+          currentLmsUser = JSON.parse(savedSession);
+          renderActiveLmsDashboard();
+          return;
+        } catch (e) {}
+      }
+      renderLmsLoginForm();
+    }
 
     function switchRole(role) {
-      currentRole = role;
-      const studentBtn = document.getElementById('roleStudentBtn');
-      const teacherBtn = document.getElementById('roleTeacherBtn');
-      const idLabel = document.getElementById('loginIdLabel');
-      const usernameInput = document.getElementById('lmsUsername');
+      activeRole = role;
+      renderLmsLoginForm();
+    }
 
-      if (role === 'student') {
-        studentBtn.className = 'flex-1 py-2 text-xs font-bold rounded-lg bg-white shadow-sm text-brand-600 transition-all';
-        teacherBtn.className = 'flex-1 py-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition-all';
-        idLabel.textContent = 'Nomor Induk Siswa Nasional (NISN)';
-        usernameInput.placeholder = 'Contoh: 0076543210';
-      } else {
-        teacherBtn.className = 'flex-1 py-2 text-xs font-bold rounded-lg bg-white shadow-sm text-brand-600 transition-all';
-        studentBtn.className = 'flex-1 py-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition-all';
-        idLabel.textContent = 'Nomor Induk Pegawai (NIP / NUPTK)';
-        usernameInput.placeholder = 'Contoh: 19850214 201001 2 015';
+    function quickFillLogin(role, username, password) {
+      activeRole = role;
+      renderLmsLoginForm();
+      setTimeout(() => {
+        const u = document.getElementById('lmsUsername');
+        const p = document.getElementById('lmsPassword');
+        if (u) u.value = username;
+        if (p) p.value = password;
+      }, 50);
+    }
+
+    function renderLmsLoginForm() {
+      const container = document.getElementById('lmsAuthContainer');
+      if (!container) return;
+
+      let idLabel = 'Nomor Induk Siswa Nasional (NISN)';
+      let idPlaceholder = 'Contoh: 0076543210';
+      if (activeRole === 'teacher') {
+        idLabel = 'Nomor Induk Pegawai (NIP / NUPTK)';
+        idPlaceholder = 'Contoh: 197908192005011008';
+      } else if (activeRole === 'admin') {
+        idLabel = 'Username Administrator LMS';
+        idPlaceholder = 'admin';
       }
+
+      container.innerHTML = `
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-lg">Masuk LMS SMAN 1 Bengkayang</h3>
+            <p class="text-xs text-slate-500">Pilih peran dan gunakan akun terdaftar</p>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
+            <i data-lucide="key" class="w-5 h-5"></i>
+          </div>
+        </div>
+
+        <!-- 3-Role Switcher -->
+        <div class="grid grid-cols-3 gap-1 rounded-xl bg-slate-100 p-1 mb-5 text-xs font-bold">
+          <button onclick="switchRole('student')" class="py-2 rounded-lg transition-all ${activeRole === 'student' ? 'bg-white text-brand-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
+            👨‍🎓 Siswa
+          </button>
+          <button onclick="switchRole('teacher')" class="py-2 rounded-lg transition-all ${activeRole === 'teacher' ? 'bg-white text-brand-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
+            👩‍🏫 Guru
+          </button>
+          <button onclick="switchRole('admin')" class="py-2 rounded-lg transition-all ${activeRole === 'admin' ? 'bg-white text-brand-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
+            🛠️ Admin
+          </button>
+        </div>
+
+        <form onsubmit="handleLmsLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">${idLabel}</label>
+            <div class="relative">
+              <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+              <input type="text" id="lmsUsername" required placeholder="${idPlaceholder}" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Kata Sandi</label>
+            <div class="relative">
+              <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+              <input type="password" id="lmsPassword" required placeholder="••••••••" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500 outline-none">
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-xs">
+            <label class="flex items-center gap-2 cursor-pointer text-slate-600">
+              <input type="checkbox" checked class="rounded border-slate-300 text-brand-600">
+              <span>Ingat Sesi Saya</span>
+            </label>
+            <a href="javascript:void(0)" onclick="alert('Hubungi staf IT SMAN 1 Bengkayang untuk reset password akun LMS Anda.')" class="text-brand-600 hover:underline font-semibold">Lupa Password?</a>
+          </div>
+
+          <button type="submit" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2">
+            <i data-lucide="log-in" class="w-4 h-4"></i> Masuk Ruang LMS
+          </button>
+        </form>
+
+        <!-- Quick Login Helper Badges -->
+        <div class="mt-5 pt-4 border-t border-slate-100">
+          <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Akses Cepat Pengujian (1-Klik):</p>
+          <div class="flex flex-wrap gap-1.5 text-[11px]">
+            <button onclick="quickFillLogin('teacher', '197908192005011008', 'guru123')" class="px-2.5 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 font-semibold border border-purple-200 transition-all">
+              👩‍🏫 Guru: Agus Salim (Fisika)
+            </button>
+            <button onclick="quickFillLogin('student', '0076543210', 'siswa123')" class="px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold border border-blue-200 transition-all">
+              👨‍🎓 Siswa: Ahmad Zaki
+            </button>
+            <button onclick="quickFillLogin('admin', 'admin', 'admin123')" class="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold border border-amber-200 transition-all">
+              🛠️ Admin LMS
+            </button>
+          </div>
+        </div>
+      `;
+
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function renderActiveLmsDashboard() {
+      const container = document.getElementById('lmsAuthContainer');
+      if (!container || !currentLmsUser) return;
+
+      const isTeacher = currentLmsUser.role === 'teacher';
+      const isAdmin = currentLmsUser.role === 'admin';
+      const isStudent = currentLmsUser.role === 'student';
+
+      let roleBadge = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700">👨‍🎓 Siswa Terdaftar</span>`;
+      if (isTeacher) roleBadge = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-700">👩‍🏫 Guru Pengampu</span>`;
+      if (isAdmin) roleBadge = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">🛠️ Admin LMS</span>`;
+
+      container.innerHTML = `
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl ${isTeacher ? 'bg-purple-600' : (isAdmin ? 'bg-slate-900' : 'bg-brand-600')} text-white flex items-center justify-center font-bold text-lg shadow-md">
+              ${currentLmsUser.name.charAt(0)}
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="font-extrabold text-slate-900 text-sm leading-tight">${currentLmsUser.name}</h3>
+                ${roleBadge}
+              </div>
+              <p class="text-xs text-slate-500 mt-0.5">${currentLmsUser.roleLabel || currentLmsUser.info || currentLmsUser.username}</p>
+            </div>
+          </div>
+          <button onclick="handleLmsLogout()" class="p-2 rounded-xl text-rose-500 hover:bg-rose-50 transition-colors" title="Keluar Akun">
+            <i data-lucide="log-out" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        ${isTeacher ? `
+          <!-- TEACHER ACTION DASHBOARD -->
+          <div class="space-y-3">
+            <div class="p-3.5 rounded-2xl bg-purple-50 border border-purple-100 text-purple-950 text-xs">
+              <p class="font-bold flex items-center gap-1.5"><i data-lucide="sparkles" class="w-4 h-4 text-purple-600"></i> Panel Manajemen Pengajar Aktif</p>
+              <p class="text-[11px] text-purple-700 mt-0.5">Anda dapat menjadwalkan kelas virtual, upload materi, dan membuat kuis CBT secara langsung.</p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-2 pt-1">
+              <button onclick="document.getElementById('teacherLiveModal').classList.remove('hidden'); if(typeof lucide!=='undefined') lucide.createIcons();" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow flex items-center justify-center gap-2 transition-all">
+                <i data-lucide="video" class="w-4 h-4"></i> + Jadwalkan Live Video Class
+              </button>
+              <button onclick="document.getElementById('teacherCourseAddModal').classList.remove('hidden'); if(typeof lucide!=='undefined') lucide.createIcons();" class="w-full py-2.5 px-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow flex items-center justify-center gap-2 transition-all">
+                <i data-lucide="book-open" class="w-4 h-4"></i> + Upload Modul & Materi Pelajaran
+              </button>
+              <button onclick="document.getElementById('teacherCbtAddModal').classList.remove('hidden'); if(typeof lucide!=='undefined') lucide.createIcons();" class="w-full py-2.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow flex items-center justify-center gap-2 transition-all">
+                <i data-lucide="check-square" class="w-4 h-4"></i> + Buat Simulasi Ujian CBT
+              </button>
+              <button onclick="openLmsUserModal()" class="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center gap-2 transition-all">
+                <i data-lucide="users" class="w-4 h-4"></i> Direktori Pengguna & Siswa
+              </button>
+            </div>
+          </div>
+        ` : (isAdmin ? `
+          <!-- ADMIN LMS ACTION DASHBOARD -->
+          <div class="space-y-3">
+            <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 text-xs">
+              <p class="font-bold flex items-center gap-1.5"><i data-lucide="shield-check" class="w-4 h-4 text-amber-600"></i> Mode Super Administrator LMS</p>
+              <p class="text-[11px] text-amber-800 mt-0.5">Kontrol penuh pengguna Guru & Siswa, pengaturan server ujian, dan konten modul.</p>
+            </div>
+
+            <div class="space-y-2 pt-1">
+              <button onclick="openLmsUserModal()" class="w-full py-3 px-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-xs shadow-lg flex items-center justify-center gap-2 transition-all">
+                <i data-lucide="users" class="w-4 h-4"></i> Buka User Control (Kelola Guru & Siswa)
+              </button>
+              <a href="admin.html#tab-elearning" class="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow flex items-center justify-center gap-2 transition-all">
+                <i data-lucide="settings" class="w-4 h-4 text-amber-400"></i> Buka Master Admin Panel Sekolah
+              </a>
+            </div>
+          </div>
+        ` : `
+          <!-- STUDENT ACTION DASHBOARD -->
+          <div class="space-y-3">
+            <div class="p-3.5 rounded-2xl bg-blue-50 border border-blue-100 text-blue-950 text-xs">
+              <p class="font-bold">Status: Aktif Mengikuti Pembelajaran</p>
+              <p class="text-[11px] text-blue-700 mt-0.5">Semua modul terbuka. Ikuti jadwal Live Class dan Ujian CBT tepat waktu.</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-center text-xs">
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                <p class="text-base font-black text-brand-600">6</p>
+                <p class="text-[10px] text-slate-500">Modul Saya</p>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                <p class="text-base font-black text-emerald-600">3</p>
+                <p class="text-[10px] text-slate-500">Ujian CBT Siap</p>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2 pt-1">
+              <a href="#materiSection" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs text-center shadow transition-all">
+                Lanjut Belajar Materi Digital
+              </a>
+              <a href="#cbtSection" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs text-center shadow transition-all">
+                Buka Jadwal Ujian CBT Online
+              </a>
+            </div>
+          </div>
+        `)}
+
+        <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+          <span>Server: SMAN 1 Bengkayang LMS</span>
+          <button onclick="handleLmsLogout()" class="text-rose-600 font-bold hover:underline">Keluar Sesi</button>
+        </div>
+      `;
+
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     function handleLmsLogin(e) {
       e.preventDefault();
-      const user = document.getElementById('lmsUsername').value;
-      if (typeof window.showToast === 'function') {
-        window.showToast(`Berhasil masuk ke Ruang Belajar Digital (${currentRole === 'student' ? 'Siswa' : 'Guru'})! Mengalihkan...`);
+      const usernameInput = document.getElementById('lmsUsername').value.trim();
+      const passwordInput = document.getElementById('lmsPassword').value.trim();
+
+      const users = getLmsUsers();
+      const found = users.find(u => (u.username === usernameInput || u.email === usernameInput) && u.password === passwordInput);
+
+      if (found) {
+        if (found.status === 'Nonaktif') {
+          alert('Akun Anda saat ini dinonaktifkan oleh Administrator. Silakan hubungi pengelola LMS.');
+          return;
+        }
+        currentLmsUser = found;
+        localStorage.setItem('elearning_active_user', JSON.stringify(found));
+        renderActiveLmsDashboard();
+        if (window.showToast) window.showToast(`Selamat datang, ${found.name}! Masuk sebagai ${found.roleLabel || found.role}.`, 'success');
       } else {
-        alert(`Berhasil masuk ke E-Learning sebagai ${currentRole === 'student' ? 'Siswa' : 'Guru'}!`);
+        alert('Kredensial tidak cocok! Pastikan NISN / NIP dan Kata Sandi dimasukkan dengan benar. Anda juga dapat menggunakan tombol 1-Klik di bawah form.');
       }
-      setTimeout(() => {
-        alert('Selamat datang di portal pembelajaran digital SMAN 1 Bengkayang! Anda dapat mengakses materi, video pembelajaran, dan tugas.');
-      }, 800);
+    }
+
+    function handleLmsLogout() {
+      if (confirm('Keluar dari sesi akun LMS?')) {
+        currentLmsUser = null;
+        localStorage.removeItem('elearning_active_user');
+        renderLmsLoginForm();
+        if (window.showToast) window.showToast('Berhasil keluar dari akun LMS.', 'success');
+      }
+    }
+
+    // Modal User Control
+    function openLmsUserModal() {
+      document.getElementById('elearningUserControlModal').classList.remove('hidden');
+      renderModalUserTable();
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function closeLmsUserModal() {
+      document.getElementById('elearningUserControlModal').classList.add('hidden');
+    }
+
+    function renderModalUserTable() {
+      const tbody = document.getElementById('modalUsersTableBody');
+      if (!tbody) return;
+
+      const users = getLmsUsers();
+      const filterRole = document.getElementById('modalUserRoleFilter') ? document.getElementById('modalUserRoleFilter').value : 'all';
+      const search = document.getElementById('modalUserSearch') ? document.getElementById('modalUserSearch').value.toLowerCase() : '';
+
+      tbody.innerHTML = '';
+      const filtered = users.filter(u => {
+        const matchesRole = filterRole === 'all' || u.role === filterRole;
+        const matchesSearch = !search || u.name.toLowerCase().includes(search) || u.username.toLowerCase().includes(search);
+        return matchesRole && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="px-3 py-6 text-center text-xs text-slate-400">Tidak ada pengguna yang cocok.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach(u => {
+        const isTeacher = u.role === 'teacher';
+        const isAdmin = u.role === 'admin';
+        let badge = `<span class="px-2 py-0.5 rounded text-[9px] font-bold bg-blue-100 text-blue-700">Siswa</span>`;
+        if (isTeacher) badge = `<span class="px-2 py-0.5 rounded text-[9px] font-bold bg-purple-100 text-purple-700">Guru</span>`;
+        if (isAdmin) badge = `<span class="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800">Admin</span>`;
+
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-slate-100 hover:bg-slate-50 text-xs';
+        tr.innerHTML = `
+          <td class="py-2.5 px-3">
+            <div class="font-bold text-slate-900">${u.name}</div>
+            <div class="text-[10px] text-slate-400">${badge}</div>
+          </td>
+          <td class="py-2.5 px-3 font-mono font-semibold text-slate-700">${u.username}</td>
+          <td class="py-2.5 px-3 text-slate-500 text-[11px]">${u.roleLabel || u.info || '-'}</td>
+          <td class="py-2.5 px-3 text-right space-x-1">
+            <button onclick="modalResetUserPassword(${u.id})" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold" title="Reset Sandi">🔑</button>
+            <button onclick="modalDeleteUser(${u.id})" class="px-2 py-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-600 text-[10px] font-semibold" title="Hapus User">🗑️</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function handleLmsModalAddUser(e) {
+      e.preventDefault();
+      const users = getLmsUsers();
+      const name = document.getElementById('modalUserFullName').value.trim();
+      const role = document.getElementById('modalUserRole').value;
+      const username = document.getElementById('modalUserLoginId').value.trim();
+      const password = document.getElementById('modalUserPassword').value.trim() || '123456';
+      const email = document.getElementById('modalUserEmail').value.trim();
+      const extra = document.getElementById('modalUserExtra').value.trim();
+
+      if (users.some(u => u.username === username)) {
+        alert(`ID Login / NISN "${username}" sudah ada! Gunakan ID yang lain.`);
+        return;
+      }
+
+      const newUser = {
+        id: Date.now(),
+        name,
+        username,
+        password,
+        role,
+        email,
+        roleLabel: extra || (role === 'teacher' ? 'Guru Pengampu' : (role === 'student' ? 'Siswa' : 'Admin')),
+        info: extra || username,
+        status: 'Aktif'
+      };
+
+      users.push(newUser);
+      localStorage.setItem('elearning_users', JSON.stringify(users));
+      window.dispatchEvent(new Event('storage'));
+      renderModalUserTable();
+      e.target.reset();
+      if (window.showToast) window.showToast(`Akun ${name} berhasil ditambahkan!`, 'success');
+    }
+
+    function modalResetUserPassword(id) {
+      const users = getLmsUsers();
+      const user = users.find(u => u.id === id);
+      if (!user) return;
+      const newPass = prompt(`Reset kata sandi untuk ${user.name} (${user.username}):`, '123456');
+      if (newPass !== null && newPass.trim() !== '') {
+        user.password = newPass.trim();
+        localStorage.setItem('elearning_users', JSON.stringify(users));
+        window.dispatchEvent(new Event('storage'));
+        if (window.showToast) window.showToast(`Password ${user.name} berhasil direset!`, 'success');
+      }
+    }
+
+    function modalDeleteUser(id) {
+      let users = getLmsUsers();
+      const user = users.find(u => u.id === id);
+      if (!user) return;
+      if (confirm(`Hapus akun ${user.name} (${user.username})?`)) {
+        users = users.filter(u => u.id !== id);
+        localStorage.setItem('elearning_users', JSON.stringify(users));
+        window.dispatchEvent(new Event('storage'));
+        renderModalUserTable();
+        if (window.showToast) window.showToast(`Akun ${user.name} dihapus`, 'success');
+      }
+    }
+
+    // Teacher Modals Handlers
+    function handleTeacherSaveLiveClass(e) {
+      e.preventDefault();
+      const liveList = JSON.parse(localStorage.getItem('school_live_classes')) || (typeof DEFAULT_LIVE_CLASSES_MAIN !== 'undefined' ? DEFAULT_LIVE_CLASSES_MAIN : []);
+      const newItem = {
+        id: Date.now(),
+        subject: document.getElementById('tLiveSubject').value.trim(),
+        teacher: currentLmsUser ? currentLmsUser.name : 'Guru Pengampu',
+        grade: document.getElementById('tLiveGrade').value.trim(),
+        schedule: document.getElementById('tLiveSchedule').value.trim(),
+        status: document.getElementById('tLiveStatus').value
+      };
+      liveList.unshift(newItem);
+      localStorage.setItem('school_live_classes', JSON.stringify(liveList));
+      window.dispatchEvent(new Event('storage'));
+      if (typeof renderDynamicLiveClasses === 'function') renderDynamicLiveClasses();
+      document.getElementById('teacherLiveModal').classList.add('hidden');
+      e.target.reset();
+      if (window.showToast) window.showToast('Jadwal Live Class berhasil ditambahkan & tayang!', 'success');
+    }
+
+    function handleTeacherSaveCourse(e) {
+      e.preventDefault();
+      const coursesList = JSON.parse(localStorage.getItem('school_courses_data')) || (typeof DEFAULT_COURSES_MAIN !== 'undefined' ? DEFAULT_COURSES_MAIN : []);
+      const category = document.getElementById('tCourseCategory').value;
+      const newItem = {
+        id: Date.now(),
+        name: document.getElementById('tCourseName').value.trim(),
+        category: category,
+        catLabel: category.toUpperCase(),
+        modules: document.getElementById('tCourseModules').value.trim(),
+        teacher: currentLmsUser ? currentLmsUser.name : 'Guru Pengampu',
+        desc: document.getElementById('tCourseDesc').value.trim(),
+        progress: 100,
+        icon: 'book-open'
+      };
+      coursesList.unshift(newItem);
+      localStorage.setItem('school_courses_data', JSON.stringify(coursesList));
+      window.dispatchEvent(new Event('storage'));
+      if (typeof renderDynamicCourses === 'function') renderDynamicCourses();
+      document.getElementById('teacherCourseAddModal').classList.add('hidden');
+      e.target.reset();
+      if (window.showToast) window.showToast('Modul pembelajaran berhasil diterbitkan!', 'success');
+    }
+
+    function handleTeacherSaveCbt(e) {
+      e.preventDefault();
+      const cbtList = JSON.parse(localStorage.getItem('school_cbt_data')) || (typeof DEFAULT_CBT_MAIN !== 'undefined' ? DEFAULT_CBT_MAIN : []);
+      const newItem = {
+        id: Date.now(),
+        title: document.getElementById('tCbtTitle').value.trim(),
+        desc: document.getElementById('tCbtDesc').value.trim(),
+        duration: +document.getElementById('tCbtDuration').value || 60,
+        questions: +document.getElementById('tCbtQuestions').value || 30,
+        badge: 'AKTIF',
+        deadline: document.getElementById('tCbtDeadline').value.trim() || 'Sesuai Kalender'
+      };
+      cbtList.unshift(newItem);
+      localStorage.setItem('school_cbt_data', JSON.stringify(cbtList));
+      window.dispatchEvent(new Event('storage'));
+      if (typeof renderDynamicCbt === 'function') renderDynamicCbt();
+      document.getElementById('teacherCbtAddModal').classList.add('hidden');
+      e.target.reset();
+      if (window.showToast) window.showToast('Jadwal Simulasi Ujian CBT berhasil ditambahkan!', 'success');
     }
 
     function filterCourses(category) {
@@ -803,6 +1385,10 @@
     function closeCourseModal() {
       document.getElementById('courseModal').classList.add('hidden');
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkActiveLmsSession();
+    });
   </script>
 </body>
 </html>

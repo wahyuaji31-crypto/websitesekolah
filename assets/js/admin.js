@@ -137,6 +137,16 @@ const DEFAULT_CBT = [
   { id: 3, title: 'Kuis Interaktif Algoritma & Coding', desc: 'Uji pemahaman dasar logika percabangan, perulangan & data struktur.', duration: 45, questions: 25, badge: 'KOMPETENSI IT', deadline: 'Live Leaderboard' }
 ];
 
+const DEFAULT_LMS_USERS = [
+  { id: 1, name: 'Dr. H. Rahmat Hidayat, M.Pd.', username: 'admin', password: 'admin123', role: 'admin', email: 'admin@sman1bky.sch.id', roleLabel: 'Super Admin LMS', info: 'Pengelola Utama Sistem', status: 'Aktif' },
+  { id: 2, name: 'Agus Salim, M.Si.', username: '197908192005011008', password: 'guru123', role: 'teacher', email: 'agus.salim@sman1bky.sch.id', roleLabel: 'Guru Fisika', info: 'NIP. 19790819 200501 1 008', status: 'Aktif' },
+  { id: 3, name: 'Ratna Sari, S.Pd.', username: '198502142010012015', password: 'guru123', role: 'teacher', email: 'ratna.sari@sman1bky.sch.id', roleLabel: 'Guru Matematika', info: 'NIP. 19850214 201001 2 015', status: 'Aktif' },
+  { id: 4, name: 'Fajar Nugraha, S.Kom.', username: '199211082019031005', password: 'guru123', role: 'teacher', email: 'fajar.nugraha@sman1bky.sch.id', roleLabel: 'Guru Informatika', info: 'NIP. 19921108 201903 1 005', status: 'Aktif' },
+  { id: 5, name: 'Ahmad Zaki Pratama', username: '0076543210', password: 'siswa123', role: 'student', email: 'zaki@student.sman1bky.sch.id', roleLabel: 'Siswa Kelas XI MIPA 1', info: 'NISN. 0076543210', status: 'Aktif' },
+  { id: 6, name: 'Siti Nurhaliza', username: '0076543211', password: 'siswa123', role: 'student', email: 'siti@student.sman1bky.sch.id', roleLabel: 'Siswa Kelas XI MIPA 2', info: 'NISN. 0076543211', status: 'Aktif' },
+  { id: 7, name: 'Bayu Saputra', username: '0076543212', password: 'siswa123', role: 'student', email: 'bayu@student.sman1bky.sch.id', roleLabel: 'Siswa Kelas X Fase E-1', info: 'NISN. 0076543212', status: 'Aktif' }
+];
+
 const DEFAULT_WEB_SETTINGS = {
   schoolName: 'SMA Negeri 1 Bengkayang',
   schoolShortName: 'SMAN 1 Bengkayang',
@@ -180,6 +190,7 @@ let messagesList = [];
 let liveClassList = [];
 let coursesList = [];
 let cbtList = [];
+let lmsUsersList = [];
 let lmsSettings = DEFAULT_LMS_SETTINGS;
 
 function loadData() {
@@ -193,6 +204,7 @@ function loadData() {
   liveClassList = JSON.parse(localStorage.getItem('school_live_classes')) || DEFAULT_LIVE_CLASSES;
   coursesList = JSON.parse(localStorage.getItem('school_courses_data')) || DEFAULT_COURSES;
   cbtList = JSON.parse(localStorage.getItem('school_cbt_data')) || DEFAULT_CBT;
+  lmsUsersList = JSON.parse(localStorage.getItem('elearning_users')) || DEFAULT_LMS_USERS;
   lmsSettings = JSON.parse(localStorage.getItem('school_lms_settings')) || DEFAULT_LMS_SETTINGS;
 
   // Persist defaults
@@ -204,6 +216,7 @@ function loadData() {
   localStorage.setItem('school_live_classes', JSON.stringify(liveClassList));
   localStorage.setItem('school_courses_data', JSON.stringify(coursesList));
   localStorage.setItem('school_cbt_data', JSON.stringify(cbtList));
+  localStorage.setItem('elearning_users', JSON.stringify(lmsUsersList));
   localStorage.setItem('school_lms_settings', JSON.stringify(lmsSettings));
 }
 
@@ -708,15 +721,106 @@ function saveWebSettings(e) {
   };
 
   localStorage.setItem('school_web_settings', JSON.stringify(updatedSettings));
-  if (window.showToast) window.showToast('Pengaturan website berhasil disimpan!', 'success');
+  if (typeof applyWebSettings === 'function') {
+    applyWebSettings();
+  }
+  window.dispatchEvent(new Event('storage'));
+  if (window.showToast) window.showToast('Pengaturan website berhasil disimpan dan disinkronkan!', 'success');
 }
 
 function resetWebSettings() {
   if (confirm('Kembalikan ke pengaturan awal SMAN 1 Bengkayang?')) {
     localStorage.setItem('school_web_settings', JSON.stringify(DEFAULT_WEB_SETTINGS));
     loadWebSettings();
+    if (typeof applyWebSettings === 'function') applyWebSettings();
+    window.dispatchEvent(new Event('storage'));
     if (window.showToast) window.showToast('Pengaturan dikembalikan ke default.', 'success');
   }
+}
+
+// Export All School Data as JSON Backup for GitHub / Persistence
+function exportAllSchoolData() {
+  const fullBackup = {
+    exportedAt: new Date().toISOString(),
+    school_web_settings: JSON.parse(localStorage.getItem('school_web_settings')) || DEFAULT_WEB_SETTINGS,
+    school_teachers_data: JSON.parse(localStorage.getItem('school_teachers_data')) || DEFAULT_TEACHERS_DATA,
+    school_ekskul_data: JSON.parse(localStorage.getItem('school_ekskul_data')) || DEFAULT_EKSKUL_DATA,
+    school_agenda_data: JSON.parse(localStorage.getItem('school_agenda_data')) || DEFAULT_AGENDA_DATA,
+    school_gallery_data: JSON.parse(localStorage.getItem('school_gallery_data')) || DEFAULT_GALLERY_DATA,
+    school_facilities_data: JSON.parse(localStorage.getItem('school_facilities_data')) || DEFAULT_FACILITIES_DATA,
+    school_live_classes: JSON.parse(localStorage.getItem('school_live_classes')) || DEFAULT_LIVE_CLASSES,
+    school_courses_data: JSON.parse(localStorage.getItem('school_courses_data')) || DEFAULT_COURSES,
+    school_cbt_data: JSON.parse(localStorage.getItem('school_cbt_data')) || DEFAULT_CBT,
+    school_lms_settings: JSON.parse(localStorage.getItem('school_lms_settings')) || DEFAULT_LMS_SETTINGS,
+    elearning_users: JSON.parse(localStorage.getItem('elearning_users')) || DEFAULT_LMS_USERS,
+    ppdb_registrations: JSON.parse(localStorage.getItem('ppdb_registrations')) || DEFAULT_PPDB_DATA,
+    school_messages: JSON.parse(localStorage.getItem('school_messages')) || DEFAULT_MESSAGES
+  };
+
+  const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(fullBackup, null, 2));
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute('href', dataStr);
+  downloadAnchor.setAttribute('download', `sman1bengkayang_data_${new Date().toISOString().slice(0, 10)}.json`);
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+
+  if (window.showToast) window.showToast('File backup JSON berhasil diunduh!', 'success');
+}
+
+// Import School Data from JSON File
+function importAllSchoolData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.school_web_settings) localStorage.setItem('school_web_settings', JSON.stringify(data.school_web_settings));
+      if (data.school_teachers_data) localStorage.setItem('school_teachers_data', JSON.stringify(data.school_teachers_data));
+      if (data.school_ekskul_data) localStorage.setItem('school_ekskul_data', JSON.stringify(data.school_ekskul_data));
+      if (data.school_agenda_data) localStorage.setItem('school_agenda_data', JSON.stringify(data.school_agenda_data));
+      if (data.school_gallery_data) localStorage.setItem('school_gallery_data', JSON.stringify(data.school_gallery_data));
+      if (data.school_facilities_data) localStorage.setItem('school_facilities_data', JSON.stringify(data.school_facilities_data));
+      if (data.school_live_classes) localStorage.setItem('school_live_classes', JSON.stringify(data.school_live_classes));
+      if (data.school_courses_data) localStorage.setItem('school_courses_data', JSON.stringify(data.school_courses_data));
+      if (data.school_cbt_data) localStorage.setItem('school_cbt_data', JSON.stringify(data.school_cbt_data));
+      if (data.school_lms_settings) localStorage.setItem('school_lms_settings', JSON.stringify(data.school_lms_settings));
+      if (data.elearning_users) localStorage.setItem('elearning_users', JSON.stringify(data.elearning_users));
+      if (data.ppdb_registrations) localStorage.setItem('ppdb_registrations', JSON.stringify(data.ppdb_registrations));
+      if (data.school_messages) localStorage.setItem('school_messages', JSON.stringify(data.school_messages));
+
+      loadData();
+      loadWebSettings();
+      loadLmsSettings();
+      renderPPDBTable();
+      renderAdminAgenda();
+      renderAdminEkskul();
+      renderAdminTeachers();
+      renderAdminGallery();
+      renderAdminFacilities();
+      renderAdminLiveClasses();
+      renderAdminCourses();
+      renderAdminCbt();
+      renderAdminLmsUsers();
+      renderMessages();
+      updateStatsCards();
+
+      window.dispatchEvent(new Event('storage'));
+      if (window.showToast) window.showToast('Semua data berhasil diimpor & disinkronkan!', 'success');
+    } catch (err) {
+      alert('Gagal mengimpor file JSON: Format file tidak valid.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function copyConfigJson() {
+  const currentSettings = JSON.parse(localStorage.getItem('school_web_settings')) || DEFAULT_WEB_SETTINGS;
+  navigator.clipboard.writeText(JSON.stringify(currentSettings, null, 2)).then(() => {
+    if (window.showToast) window.showToast('JSON Konfigurasi berhasil disalin ke clipboard!', 'success');
+  });
 }
 
 // -------------------------------------------------------------
@@ -905,7 +1009,145 @@ function deleteCbt(index) {
 }
 
 // -------------------------------------------------------------
-// 9. PESAN MASUK & STATS
+// 9. LMS USER CONTROL (GURU & SISWA)
+// -------------------------------------------------------------
+function renderAdminLmsUsers(filterRole = 'all', searchQuery = '') {
+  const tbody = document.getElementById('adminLmsUsersTableBody');
+  if (!tbody) return;
+
+  tbody.innerHTML = '';
+  const filtered = lmsUsersList.filter(u => {
+    const matchesRole = (filterRole === 'all' || u.role === filterRole);
+    const q = searchQuery.toLowerCase();
+    const matchesSearch = !q || (u.name && u.name.toLowerCase().includes(q)) || (u.username && u.username.toLowerCase().includes(q)) || (u.email && u.email.toLowerCase().includes(q));
+    return matchesRole && matchesSearch;
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-xs text-slate-400">Belum ada data akun pengguna yang cocok.</td></tr>`;
+    return;
+  }
+
+  filtered.forEach((u, idx) => {
+    const isTeacher = u.role === 'teacher';
+    const isAdmin = u.role === 'admin';
+    const isStudent = u.role === 'student';
+    
+    let roleBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-100 text-brand-700">👨‍🎓 Siswa</span>`;
+    if (isTeacher) roleBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-purple-100 text-purple-700">👩‍🏫 Guru</span>`;
+    if (isAdmin) roleBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">🛠️ Admin LMS</span>`;
+
+    const isActive = u.status !== 'Nonaktif';
+
+    const tr = document.createElement('tr');
+    tr.className = 'border-b border-slate-100 hover:bg-slate-50/70 transition-colors text-xs';
+    tr.innerHTML = `
+      <td class="px-4 py-3.5 font-bold text-slate-900">
+        <div>${u.name}</div>
+        <div class="text-[10px] text-slate-400 font-normal">${u.email || '-'}</div>
+      </td>
+      <td class="px-4 py-3.5">${roleBadge}</td>
+      <td class="px-4 py-3.5 font-mono font-semibold text-slate-700">${u.username}</td>
+      <td class="px-4 py-3.5 text-slate-600">${u.roleLabel || u.info || '-'}</td>
+      <td class="px-4 py-3.5">
+        <button onclick="toggleLmsUserStatus(${u.id})" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold cursor-pointer transition-all ${
+          isActive ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100' : 'bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100'
+        }">
+          <span class="w-1.5 h-1.5 rounded-full ${isActive ? 'bg-emerald-500' : 'bg-rose-500'}"></span>
+          ${isActive ? 'Aktif' : 'Nonaktif'}
+        </button>
+      </td>
+      <td class="px-4 py-3.5 text-right space-x-1.5">
+        <button onclick="resetLmsUserPassword(${u.id})" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold transition-colors" title="Reset Kata Sandi">
+          🔑 Reset
+        </button>
+        <button onclick="deleteLmsUser(${u.id})" class="px-2 py-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-600 text-[11px] font-semibold transition-colors" title="Hapus Akun">
+          🗑️ Hapus
+        </button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function handleSaveLmsUser(e) {
+  e.preventDefault();
+  const name = document.getElementById('userFullName').value.trim();
+  const role = document.getElementById('userRole').value;
+  const username = document.getElementById('userLoginId').value.trim();
+  const password = document.getElementById('userPassword').value.trim() || '123456';
+  const email = document.getElementById('userEmail').value.trim();
+  const extra = document.getElementById('userExtraInfo').value.trim();
+
+  // Check duplicate username
+  if (lmsUsersList.some(u => u.username === username)) {
+    alert(`Username / NISN / NIP "${username}" sudah terdaftar dalam sistem LMS! Gunakan ID lain.`);
+    return;
+  }
+
+  let roleLabel = extra;
+  if (!roleLabel) {
+    if (role === 'teacher') roleLabel = 'Guru Mata Pelajaran';
+    else if (role === 'student') roleLabel = 'Peserta Didik';
+    else roleLabel = 'Administrator LMS';
+  }
+
+  const newUser = {
+    id: Date.now(),
+    name,
+    username,
+    password,
+    role,
+    email,
+    roleLabel,
+    info: extra || (role === 'student' ? 'NISN. ' + username : 'NIP. ' + username),
+    status: 'Aktif'
+  };
+
+  lmsUsersList.push(newUser);
+  localStorage.setItem('elearning_users', JSON.stringify(lmsUsersList));
+  renderAdminLmsUsers();
+  window.dispatchEvent(new Event('storage'));
+  e.target.reset();
+  if (window.showToast) window.showToast(`Akun ${name} (${role}) berhasil ditambahkan!`, 'success');
+}
+
+function toggleLmsUserStatus(id) {
+  const user = lmsUsersList.find(u => u.id === id);
+  if (!user) return;
+  user.status = user.status === 'Nonaktif' ? 'Aktif' : 'Nonaktif';
+  localStorage.setItem('elearning_users', JSON.stringify(lmsUsersList));
+  renderAdminLmsUsers();
+  window.dispatchEvent(new Event('storage'));
+  if (window.showToast) window.showToast(`Status akun ${user.name} diubah menjadi ${user.status}`, 'success');
+}
+
+function resetLmsUserPassword(id) {
+  const user = lmsUsersList.find(u => u.id === id);
+  if (!user) return;
+  const newPass = prompt(`Masukkan password baru untuk akun ${user.name} (${user.username}):`, '123456');
+  if (newPass !== null && newPass.trim() !== '') {
+    user.password = newPass.trim();
+    localStorage.setItem('elearning_users', JSON.stringify(lmsUsersList));
+    window.dispatchEvent(new Event('storage'));
+    if (window.showToast) window.showToast(`Password akun ${user.name} berhasil direset!`, 'success');
+  }
+}
+
+function deleteLmsUser(id) {
+  const user = lmsUsersList.find(u => u.id === id);
+  if (!user) return;
+  if (confirm(`Apakah Anda yakin ingin menghapus akun "${user.name}" (${user.username}) dari LMS?`)) {
+    lmsUsersList = lmsUsersList.filter(u => u.id !== id);
+    localStorage.setItem('elearning_users', JSON.stringify(lmsUsersList));
+    renderAdminLmsUsers();
+    window.dispatchEvent(new Event('storage'));
+    if (window.showToast) window.showToast(`Akun ${user.name} berhasil dihapus`, 'success');
+  }
+}
+
+// -------------------------------------------------------------
+// 10. PESAN MASUK & STATS
 // -------------------------------------------------------------
 function renderMessages() {
   const container = document.getElementById('messagesContainer');
@@ -971,6 +1213,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderAdminLiveClasses();
   renderAdminCourses();
   renderAdminCbt();
+  renderAdminLmsUsers();
   loadLmsSettings();
   renderMessages();
   loadWebSettings();
@@ -987,6 +1230,21 @@ document.addEventListener('DOMContentLoaded', () => {
   if (searchInput) {
     searchInput.addEventListener('input', () => {
       renderPPDBTable(trackFilter ? trackFilter.value : 'all', searchInput.value);
+    });
+  }
+
+  const lmsRoleFilter = document.getElementById('adminLmsRoleFilter');
+  const lmsUserSearch = document.getElementById('adminLmsUserSearch');
+
+  if (lmsRoleFilter) {
+    lmsRoleFilter.addEventListener('change', () => {
+      renderAdminLmsUsers(lmsRoleFilter.value, lmsUserSearch ? lmsUserSearch.value : '');
+    });
+  }
+
+  if (lmsUserSearch) {
+    lmsUserSearch.addEventListener('input', () => {
+      renderAdminLmsUsers(lmsRoleFilter ? lmsRoleFilter.value : 'all', lmsUserSearch.value);
     });
   }
 });

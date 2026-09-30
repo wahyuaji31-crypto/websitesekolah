@@ -49,50 +49,103 @@ const DEFAULT_FACILITIES = [
   { id: 6, title: 'Masjid Sekolah & Klinik UKS', desc: 'Masjid 2 lantai yang nyaman untuk ibadah harian serta klinik kesehatan dengan perawat siaga.', img: 'https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=600&auto=format&fit=crop' }
 ];
 
-// Load and Apply Dynamic Web Settings
+// Default Centralized Web Settings
+const DEFAULT_WEB_SETTINGS = {
+  schoolName: 'SMA Negeri 1 Bengkayang',
+  schoolShortName: 'SMAN 1 Bengkayang',
+  schoolTagline: 'Mewujudkan Generasi Emas yang Cerdas, Berkarakter & Berdaya Saing Global',
+  schoolNpsn: '30101234',
+  schoolAccreditation: 'Akreditasi A (Unggul)',
+  schoolAddress: 'Jl. Sanggau Ledo No. 45, Bengkayang, Kalimantan Barat, 79212',
+  schoolPhone: '(0562) 631-890',
+  schoolWhatsapp: '+62 812-3456-7890',
+  schoolEmail: 'info@sman1bky.sch.id',
+  schoolPpdbEmail: 'ppdb@sman1bky.sch.id',
+  headmasterName: 'Dr. H. Rahmat Hidayat, M.Pd.',
+  headmasterNip: 'NIP. 19740512 199903 1 004',
+  headmasterPhoto: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop',
+  headmasterSpeech: 'Puji dan syukur kita panjatkan ke hadirat Tuhan Yang Maha Esa. Di era transformasi digital saat ini, pendidikan tidak hanya menuntut penguasaan akademis, namun juga pembentukan karakter akhlak mulia dan daya nalar kritis. SMA Negeri 1 Bengkayang terus berkomitmen menciptakan ekosistem belajar yang ramah, inovatif, dan berstandar internasional.',
+  themeColor: 'blue',
+  ppdbStatus: 'Buka'
+};
+
+// Load and Apply Dynamic Web Settings Across Any Page
 function applyWebSettings() {
-  const savedSettings = localStorage.getItem('school_web_settings');
-  if (!savedSettings) return;
-
-  try {
-    const s = JSON.parse(savedSettings);
-
-    if (s.schoolName) document.querySelectorAll('.dyn-school-name').forEach(el => el.textContent = s.schoolName);
-    if (s.schoolShortName) document.querySelectorAll('.dyn-school-short').forEach(el => el.textContent = s.schoolShortName);
-    if (s.schoolAddress) document.querySelectorAll('.dyn-school-address').forEach(el => el.textContent = s.schoolAddress);
-    if (s.schoolPhone) document.querySelectorAll('.dyn-school-phone').forEach(el => el.textContent = s.schoolPhone);
-    if (s.schoolEmail) document.querySelectorAll('.dyn-school-email').forEach(el => el.textContent = s.schoolEmail);
-    if (s.headmasterName) document.querySelectorAll('.dyn-headmaster-name').forEach(el => el.textContent = s.headmasterName);
-    if (s.headmasterNip) document.querySelectorAll('.dyn-headmaster-nip').forEach(el => el.textContent = s.headmasterNip);
-    if (s.headmasterSpeech) document.querySelectorAll('.dyn-headmaster-speech').forEach(el => el.textContent = s.headmasterSpeech);
-    if (s.headmasterPhoto) document.querySelectorAll('.dyn-headmaster-photo').forEach(el => el.src = s.headmasterPhoto);
-
-    if (s.themeColor) {
-      const root = document.documentElement;
-      if (s.themeColor === 'emerald') {
-        root.style.setProperty('--primary', '#059669');
-        root.style.setProperty('--primary-dark', '#047857');
-        root.style.setProperty('--secondary', '#10b981');
-      } else if (s.themeColor === 'indigo') {
-        root.style.setProperty('--primary', '#4f46e5');
-        root.style.setProperty('--primary-dark', '#3730a3');
-        root.style.setProperty('--secondary', '#6366f1');
-      } else if (s.themeColor === 'purple') {
-        root.style.setProperty('--primary', '#7c3aed');
-        root.style.setProperty('--primary-dark', '#5b21b6');
-        root.style.setProperty('--secondary', '#a855f7');
-      } else if (s.themeColor === 'amber') {
-        root.style.setProperty('--primary', '#d97706');
-        root.style.setProperty('--primary-dark', '#b45309');
-        root.style.setProperty('--secondary', '#f59e0b');
-      } else {
-        root.style.setProperty('--primary', '#1e40af');
-        root.style.setProperty('--primary-dark', '#1e3a8a');
-        root.style.setProperty('--secondary', '#0ea5e9');
-      }
+  const saved = localStorage.getItem('school_web_settings');
+  let s = DEFAULT_WEB_SETTINGS;
+  if (saved) {
+    try {
+      s = Object.assign({}, DEFAULT_WEB_SETTINGS, JSON.parse(saved));
+    } catch (e) {
+      console.warn('Using default web settings:', e);
     }
-  } catch (e) {
-    console.error('Error applying web settings:', e);
+  }
+
+  if (s.schoolName) {
+    document.querySelectorAll('.dyn-school-name').forEach(el => el.textContent = s.schoolName);
+  }
+  if (s.schoolShortName) {
+    document.querySelectorAll('.dyn-school-short').forEach(el => el.textContent = s.schoolShortName);
+    // Generic fallback for navbar brand text
+    document.querySelectorAll('#mainHeader a.group div span:first-child, footer a.group div span:first-child').forEach(el => {
+      if (!el.classList.contains('dyn-school-short')) el.textContent = s.schoolShortName;
+    });
+  }
+  if (s.schoolAddress) {
+    document.querySelectorAll('.dyn-school-address').forEach(el => el.textContent = s.schoolAddress);
+  }
+  if (s.schoolPhone) {
+    document.querySelectorAll('.dyn-school-phone').forEach(el => el.textContent = s.schoolPhone);
+  }
+  if (s.schoolEmail) {
+    document.querySelectorAll('.dyn-school-email').forEach(el => el.textContent = s.schoolEmail);
+  }
+  if (s.headmasterName) {
+    document.querySelectorAll('.dyn-headmaster-name').forEach(el => el.textContent = s.headmasterName);
+  }
+  if (s.headmasterNip) {
+    document.querySelectorAll('.dyn-headmaster-nip').forEach(el => el.textContent = s.headmasterNip);
+  }
+  if (s.headmasterSpeech) {
+    document.querySelectorAll('.dyn-headmaster-speech').forEach(el => el.textContent = s.headmasterSpeech);
+  }
+  if (s.headmasterPhoto) {
+    document.querySelectorAll('.dyn-headmaster-photo').forEach(el => el.src = s.headmasterPhoto);
+  }
+  if (s.schoolTagline) {
+    document.querySelectorAll('.dyn-school-tagline').forEach(el => el.textContent = s.schoolTagline);
+  }
+  if (s.schoolNpsn) {
+    document.querySelectorAll('.dyn-school-npsn').forEach(el => el.textContent = s.schoolNpsn);
+  }
+  if (s.schoolAccreditation) {
+    document.querySelectorAll('.dyn-school-accreditation').forEach(el => el.textContent = s.schoolAccreditation);
+  }
+
+  // Theme color customization
+  if (s.themeColor) {
+    const root = document.documentElement;
+    if (s.themeColor === 'emerald') {
+      root.style.setProperty('--primary', '#059669');
+      root.style.setProperty('--primary-dark', '#047857');
+      root.style.setProperty('--secondary', '#10b981');
+    } else if (s.themeColor === 'indigo') {
+      root.style.setProperty('--primary', '#4f46e5');
+      root.style.setProperty('--primary-dark', '#3730a3');
+      root.style.setProperty('--secondary', '#6366f1');
+    } else if (s.themeColor === 'purple') {
+      root.style.setProperty('--primary', '#7c3aed');
+      root.style.setProperty('--primary-dark', '#5b21b6');
+      root.style.setProperty('--secondary', '#a855f7');
+    } else if (s.themeColor === 'amber') {
+      root.style.setProperty('--primary', '#d97706');
+      root.style.setProperty('--primary-dark', '#b45309');
+      root.style.setProperty('--secondary', '#f59e0b');
+    } else {
+      root.style.setProperty('--primary', '#1e40af');
+      root.style.setProperty('--primary-dark', '#1e3a8a');
+      root.style.setProperty('--secondary', '#0ea5e9');
+    }
   }
 }
 
@@ -353,7 +406,37 @@ function renderDynamicCbt() {
     `;
     container.appendChild(card);
   });
-}
+// Global Storage Synchronizer across tabs
+window.addEventListener('storage', (e) => {
+  if (e.key === 'school_web_settings') {
+    applyWebSettings();
+  }
+  if (e.key === 'school_teachers_data') {
+    renderDynamicTeachers();
+  }
+  if (e.key === 'school_ekskul_data') {
+    renderDynamicEkskul();
+  }
+  if (e.key === 'school_agenda_data') {
+    renderDynamicAgenda();
+  }
+  if (e.key === 'school_facilities_data') {
+    renderDynamicFacilities();
+  }
+  if (e.key === 'school_gallery_data') {
+    renderDynamicGallery();
+  }
+  if (e.key === 'school_live_classes') {
+    renderDynamicLiveClasses();
+  }
+  if (e.key === 'school_courses_data') {
+    renderDynamicCourses();
+  }
+  if (e.key === 'school_cbt_data') {
+    renderDynamicCbt();
+  }
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   applyWebSettings();
