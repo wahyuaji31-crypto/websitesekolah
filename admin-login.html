@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portal Login Admin Panel SMA Negeri 1 Harapan Bangsa">
+  <title>Login Admin Panel | SMAN 1 Harapan Bangsa</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            },
+            accent: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-slate-900 min-h-screen flex items-center justify-center p-4 selection:bg-brand-500 selection:text-white relative overflow-hidden">
+
+  <!-- Ambient Glow Effects -->
+  <div class="absolute -top-40 -left-40 w-96 h-96 bg-brand-600/30 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-indigo-600/30 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="w-full max-w-md relative z-10 space-y-6">
+    
+    <!-- Top Back to Website link -->
+    <div class="flex items-center justify-between">
+      <a href="index.html" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span>Kembali ke Website Utama</span>
+      </a>
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Panel v2.5
+      </span>
+    </div>
+
+    <!-- Login Card -->
+    <div class="bg-slate-800/80 backdrop-blur-xl border border-slate-700/80 rounded-3xl p-8 sm:p-10 shadow-2xl space-y-6">
+      
+      <!-- Brand Header -->
+      <div class="text-center space-y-2">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-brand-700 to-brand-500 text-white flex items-center justify-center mx-auto shadow-lg shadow-brand-500/30">
+          <i data-lucide="shield-check" class="w-8 h-8"></i>
+        </div>
+        <h1 class="text-2xl font-extrabold text-white">Login Admin Panel</h1>
+        <p class="text-xs text-slate-400">Pusat Pengelolaan Data Sekolah & PPDB Online</p>
+      </div>
+
+      <!-- Demo Credentials Helper Banner -->
+      <div class="p-3.5 rounded-2xl bg-brand-950/60 border border-brand-500/30 text-xs text-brand-200 space-y-1">
+        <div class="flex items-center gap-1.5 font-bold text-amber-300">
+          <i data-lucide="info" class="w-4 h-4"></i>
+          <span>Akun Akses Default Admin:</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-[11px] pt-1 text-slate-300 font-mono">
+          <div>Username: <strong class="text-white">admin</strong></div>
+          <div>Password: <strong class="text-white">admin123</strong></div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Username / Email Pengguna</label>
+          <div class="relative">
+            <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+            <input type="text" id="adminUsername" required value="admin" placeholder="Masukkan username" class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Kata Sandi (Password)</label>
+          <div class="relative">
+            <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+            <input type="password" id="adminPassword" required value="admin123" placeholder="Masukkan password" class="w-full pl-10 pr-10 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all">
+            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors" aria-label="Lihat Password">
+              <i data-lucide="eye" id="eyeIcon" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between text-xs">
+          <label class="flex items-center gap-2 text-slate-400 cursor-pointer select-none">
+            <input type="checkbox" id="rememberMe" checked class="rounded bg-slate-900 border-slate-700 text-brand-600 focus:ring-brand-500">
+            <span>Ingat Sesi Masuk</span>
+          </label>
+          <a href="#" onclick="alert('Gunakan username: admin dan password: admin123'); return false;" class="text-brand-400 hover:text-brand-300 font-medium">Lupa sandi?</a>
+        </div>
+
+        <button type="submit" id="loginBtn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-brand-600/30 hover:shadow-brand-600/50 hover:scale-[1.01] transition-all flex items-center justify-center gap-2">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span>Masuk ke Dashboard Panel</span>
+        </button>
+      </form>
+
+    </div>
+
+    <!-- Security info footer -->
+    <div class="text-center text-xs text-slate-500">
+      <p>© 2026 SMAN 1 Harapan Bangsa. Hak Akses Dibatasi Administrator.</p>
+    </div>
+
+  </div>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById('adminPassword');
+      const eyeIcon = document.getElementById('eyeIcon');
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+      } else {
+        passInput.type = 'password';
+      }
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const username = document.getElementById('adminUsername').value.trim();
+      const password = document.getElementById('adminPassword').value.trim();
+
+      // Retrieve custom admin password if changed, or use default admin123
+      const storedPass = localStorage.getItem('custom_admin_password') || 'admin123';
+      const storedUser = localStorage.getItem('custom_admin_username') || 'admin';
+
+      if ((username === 'admin' || username === storedUser) && (password === storedPass || password === 'admin123')) {
+        // Save session
+        const sessionData = {
+          user: username,
+          role: 'Super Administrator',
+          loginTime: new Date().toISOString()
+        };
+        localStorage.setItem('admin_session', JSON.stringify(sessionData));
+
+        if (window.showToast) window.showToast('Login berhasil! Membuka Admin Panel...', 'success');
+        
+        setTimeout(() => {
+          window.location.href = 'admin.html';
+        }, 600);
+      } else {
+        if (window.showToast) {
+          window.showToast('Username atau password salah! (Coba admin / admin123)', 'error');
+        } else {
+          alert('Username atau password salah! Silakan coba username: admin dan password: admin123');
+        }
+      }
+    }
+
+    // Auto redirect if already logged in
+    document.addEventListener('DOMContentLoaded', () => {
+      const session = localStorage.getItem('admin_session');
+      if (session) {
+        // Optional: auto redirect or allow re-login
+      }
+    });
+  </script>
+</body>
+</html>

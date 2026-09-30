@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dashboard Administrator SMAN 1 Harapan Bangsa">
+  <title>Dashboard Admin | SMAN 1 Harapan Bangsa</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            },
+            accent: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased flex min-h-screen">
+
+  <!-- SIDEBAR (Desktop) -->
+  <aside class="w-64 bg-slate-900 text-slate-300 hidden md:flex flex-col justify-between border-r border-slate-800 z-20">
+    <div>
+      <!-- Brand Header -->
+      <div class="p-6 border-b border-slate-800 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold shadow-md shadow-brand-600/30">
+          <i data-lucide="shield-check" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <span class="block text-sm font-bold text-white leading-none">PANEL ADMIN</span>
+          <span class="text-[10px] text-brand-400 font-semibold uppercase tracking-wider">SMAN 1 Harapan</span>
+        </div>
+      </div>
+
+      <!-- Navigation links -->
+      <nav class="p-4 space-y-1 text-xs font-semibold">
+        <a href="#dashboard" onclick="showTab('dashboard')" id="nav-dashboard" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl bg-brand-600 text-white shadow transition-all">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Ringkasan Dashboard
+        </a>
+        <a href="#ppdb" onclick="showTab('ppdb')" id="nav-ppdb" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+          <i data-lucide="users" class="w-4 h-4"></i> Data Pendaftar PPDB
+        </a>
+        <a href="#berita" onclick="showTab('berita')" id="nav-berita" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+          <i data-lucide="newspaper" class="w-4 h-4"></i> Berita & Pengumuman
+        </a>
+        <a href="#pesan" onclick="showTab('pesan')" id="nav-pesan" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+          <i data-lucide="mail" class="w-4 h-4"></i> Pesan & Aspirasi
+        </a>
+        <a href="#pengaturan" onclick="showTab('pengaturan')" id="nav-pengaturan" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+          <i data-lucide="settings" class="w-4 h-4"></i> Ganti Password & Akun
+        </a>
+      </nav>
+    </div>
+
+    <!-- Bottom user info & actions -->
+    <div class="p-4 border-t border-slate-800 space-y-3">
+      <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-800/60">
+        <div class="w-8 h-8 rounded-full bg-brand-700 text-white flex items-center justify-center font-bold text-xs">
+          AD
+        </div>
+        <div class="overflow-hidden">
+          <p class="text-xs font-bold text-white truncate">Super Administrator</p>
+          <p class="text-[10px] text-emerald-400 font-semibold">● Online Aktif</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="flex-1 text-center py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-semibold transition-colors">
+          Lihat Web
+        </a>
+        <button onclick="logoutAdmin()" class="p-2 rounded-lg bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white transition-colors" title="Keluar">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT AREA -->
+  <div class="flex-1 flex flex-col min-w-0">
+    
+    <!-- TOPBAR -->
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+      <div class="flex items-center gap-3">
+        <h1 id="pageTitle" class="text-lg font-extrabold text-slate-900">Ringkasan Dashboard</h1>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <span class="text-xs font-medium text-slate-500 hidden sm:inline-block">
+          📅 <span id="currentDateText"></span>
+        </span>
+        <button onclick="logoutAdmin()" class="px-3.5 py-1.5 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white text-xs font-bold transition-all flex items-center gap-1.5">
+          <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          <span>Keluar</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT BODY -->
+    <main class="p-6 sm:p-8 flex-1 space-y-8 max-w-7xl w-full mx-auto">
+
+      <!-- TAB 1: DASHBOARD OVERVIEW -->
+      <div id="tab-dashboard" class="tab-content space-y-8">
+        
+        <!-- Welcome Banner -->
+        <div class="bg-gradient-to-r from-brand-900 via-brand-800 to-indigo-900 text-white rounded-3xl p-6 sm:p-8 shadow-md relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div class="space-y-2 relative z-10">
+            <span class="inline-block px-3 py-1 rounded-full bg-accent-500/20 text-amber-300 text-xs font-bold uppercase tracking-wider border border-accent-500/30">
+              Selamat Datang Kembali
+            </span>
+            <h2 class="text-2xl font-extrabold">Portal Kontrol SMAN 1 Harapan Bangsa</h2>
+            <p class="text-xs text-slate-300 max-w-xl">
+              Kelola data pendaftaran calon peserta didik baru, terbitkan warta sekolah terbaru, dan pantau pesan pengaduan pengunjung secara real-time.
+            </p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="showTab('ppdb')" class="px-4 py-2.5 rounded-xl bg-accent-500 hover:bg-accent-600 text-white text-xs font-bold shadow transition-all">
+              Buka Data PPDB
+            </button>
+          </div>
+        </div>
+
+        <!-- Metric Stat Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+          
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover-lift">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-slate-500">Total Pendaftar PPDB</span>
+              <div class="w-9 h-9 rounded-xl bg-blue-100 text-brand-600 flex items-center justify-center">
+                <i data-lucide="users" class="w-5 h-5"></i>
+              </div>
+            </div>
+            <h3 class="text-2xl font-extrabold text-slate-900" id="statTotalPPDB">0</h3>
+            <p class="text-[11px] text-emerald-600 font-semibold mt-1">● Tahun Ajaran 2026/2027</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover-lift">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-slate-500">Berkas Terverifikasi</span>
+              <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                <i data-lucide="user-check" class="w-5 h-5"></i>
+              </div>
+            </div>
+            <h3 class="text-2xl font-extrabold text-slate-900" id="statVerifiedPPDB">0</h3>
+            <p class="text-[11px] text-slate-500 mt-1">Lulus & Terverifikasi</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover-lift">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-slate-500">Berita Aktif</span>
+              <div class="w-9 h-9 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center">
+                <i data-lucide="newspaper" class="w-5 h-5"></i>
+              </div>
+            </div>
+            <h3 class="text-2xl font-extrabold text-slate-900">4 Artikel</h3>
+            <p class="text-[11px] text-slate-500 mt-1">Prestasi & Kegiatan</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover-lift">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-slate-500">Pesan Aspirasi</span>
+              <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center">
+                <i data-lucide="mail" class="w-5 h-5"></i>
+              </div>
+            </div>
+            <h3 class="text-2xl font-extrabold text-slate-900" id="statTotalMessages">0</h3>
+            <p class="text-[11px] text-slate-500 mt-1">Kotak Surat Masuk</p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- TAB 2: DATA PENDAFTAR PPDB -->
+      <div id="tab-ppdb" class="tab-content hidden space-y-6">
+        
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-6">
+          
+          <!-- Toolbar -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-lg font-bold text-slate-900">Daftar Pendaftar PPDB Online</h3>
+                <span id="ppdbCountBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-100 text-brand-700">0 Pendaftar</span>
+              </div>
+              <p class="text-xs text-slate-500 mt-0.5">Ubah status seleksi pendaftar secara langsung pada dropdown tabel.</p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+              <button onclick="exportPPDBtoCSV()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow flex items-center gap-1.5 transition-all">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i> Ekspor CSV
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter & Search Bar -->
+          <div class="flex flex-col sm:flex-row gap-3">
+            <div class="relative flex-1">
+              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+              <input type="text" id="adminSearchInput" placeholder="Cari Nama, NISN, atau No Registrasi..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+            <select id="adminTrackFilter" class="px-4 py-2.5 rounded-xl border border-slate-300 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="all">Semua Jalur Pendaftaran</option>
+              <option value="Zonasi">Jalur Zonasi</option>
+              <option value="Prestasi">Jalur Prestasi</option>
+              <option value="Afirmasi">Jalur Afirmasi</option>
+              <option value="Perpindahan">Jalur Perpindahan</option>
+            </select>
+          </div>
+
+          <!-- Responsive Table -->
+          <div class="overflow-x-auto rounded-2xl border border-slate-200">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200">
+                  <th class="py-3 px-4">No. Registrasi</th>
+                  <th class="py-3 px-4">Nama Siswa & NISN</th>
+                  <th class="py-3 px-4">Asal Sekolah</th>
+                  <th class="py-3 px-4">Jalur & Peminatan</th>
+                  <th class="py-3 px-4">Tgl Daftar</th>
+                  <th class="py-3 px-4">Status Seleksi</th>
+                  <th class="py-3 px-4 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="ppdbTableBody">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- TAB 3: BERITA & PENGUMUMAN -->
+      <div id="tab-berita" class="tab-content hidden space-y-6">
+        
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Terbitkan Berita / Pengumuman Baru</h3>
+              <p class="text-xs text-slate-500">Publikasikan informasi resmi ke portal website.</p>
+            </div>
+          </div>
+
+          <form onsubmit="handlePublishNews(event)" class="space-y-4">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Judul Artikel / Berita <span class="text-red-500">*</span></label>
+                <input type="text" id="newsTitle" required placeholder="Contoh: Siswa SMAN 1 Raih Medali Emas" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Kategori Berita <span class="text-red-500">*</span></label>
+                <select id="newsCategory" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                  <option value="Prestasi Siswa">Prestasi Siswa</option>
+                  <option value="Pengumuman">Pengumuman</option>
+                  <option value="Kesiswaan">Kesiswaan</option>
+                  <option value="Akademik">Akademik</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">URL Foto Sampul (Image URL)</label>
+              <input type="url" id="newsImgUrl" placeholder="https://images.unsplash.com/..." class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Isi Konten Berita <span class="text-red-500">*</span></label>
+              <textarea id="newsContent" rows="5" required placeholder="Tuliskan berita lengkap di sini..." class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+            </div>
+
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow flex items-center gap-2 transition-all">
+              <i data-lucide="plus" class="w-4 h-4"></i> Terbitkan Artikel Berita
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- TAB 4: PESAN & ASPIRASI -->
+      <div id="tab-pesan" class="tab-content hidden space-y-6">
+        
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+          <div class="border-b border-slate-100 pb-4">
+            <h3 class="text-lg font-bold text-slate-900">Kotak Surat Masuk & Pengaduan</h3>
+            <p class="text-xs text-slate-500">Pesan yang dikirimkan oleh orang tua, siswa, atau mitra melalui halaman Kontak.</p>
+          </div>
+
+          <div id="messagesContainer" class="space-y-3">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB 5: PENGATURAN AKUN -->
+      <div id="tab-pengaturan" class="tab-content hidden space-y-6">
+        
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm max-w-xl space-y-6">
+          <div class="border-b border-slate-100 pb-4">
+            <h3 class="text-lg font-bold text-slate-900">Ganti Kredensial Administrator</h3>
+            <p class="text-xs text-slate-500">Perbarui username dan password login panel admin.</p>
+          </div>
+
+          <form onsubmit="handleUpdateCredentials(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Username Baru</label>
+              <input type="text" id="newUsername" required value="admin" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Password Baru</label>
+              <input type="password" id="newPassword" required placeholder="Minimal 6 karakter" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Konfirmasi Password Baru</label>
+              <input type="password" id="confirmPassword" required placeholder="Ulangi password baru" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow transition-all">
+              Simpan Perubahan Akun
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/admin.js"></script>
+  <script>
+    // Tab switching
+    function showTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.sidebar-link').forEach(el => {
+        el.classList.remove('bg-brand-600', 'text-white', 'shadow');
+        el.classList.add('text-slate-400');
+      });
+
+      const selectedTab = document.getElementById(`tab-${tabName}`);
+      const selectedNav = document.getElementById(`nav-${tabName}`);
+      if (selectedTab) selectedTab.classList.remove('hidden');
+      if (selectedNav) {
+        selectedNav.classList.add('bg-brand-600', 'text-white', 'shadow');
+        selectedNav.classList.remove('text-slate-400');
+      }
+
+      // Title update
+      const titles = {
+        'dashboard': 'Ringkasan Dashboard',
+        'ppdb': 'Manajemen Pendaftar PPDB Online',
+        'berita': 'Manajemen Berita & Warta Sekolah',
+        'pesan': 'Kotak Masuk Pesan & Pengaduan',
+        'pengaturan': 'Pengaturan Akun Administrator'
+      };
+      if (document.getElementById('pageTitle')) {
+        document.getElementById('pageTitle').textContent = titles[tabName] || 'Dashboard Admin';
+      }
+    }
+
+    // Publish News Handler
+    function handlePublishNews(e) {
+      e.preventDefault();
+      const title = document.getElementById('newsTitle').value;
+      if (window.showToast) window.showToast(`Berita "${title}" berhasil diterbitkan ke website!`, 'success');
+      e.target.reset();
+    }
+
+    // Update Credentials Handler
+    function handleUpdateCredentials(e) {
+      e.preventDefault();
+      const user = document.getElementById('newUsername').value.trim();
+      const pass = document.getElementById('newPassword').value;
+      const conf = document.getElementById('confirmPassword').value;
+
+      if (pass !== conf) {
+        if (window.showToast) window.showToast('Konfirmasi kata sandi tidak cocok!', 'error');
+        return;
+      }
+
+      localStorage.setItem('custom_admin_username', user);
+      localStorage.setItem('custom_admin_password', pass);
+
+      if (window.showToast) window.showToast('Kredensial admin berhasil diperbarui!', 'success');
+    }
+
+    // Set Current Date in Topbar
+    document.addEventListener('DOMContentLoaded', () => {
+      const dateEl = document.getElementById('currentDateText');
+      if (dateEl) {
+        dateEl.textContent = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      }
+    });
+  </script>
+</body>
+</html>
