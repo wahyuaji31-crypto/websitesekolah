@@ -2,7 +2,78 @@
  * Main JavaScript File for SMA Negeri 1 Bengkayang Website
  */
 
+// Load and Apply Dynamic Web Settings across all pages
+function applyWebSettings() {
+  const savedSettings = localStorage.getItem('school_web_settings');
+  if (!savedSettings) return;
+
+  try {
+    const s = JSON.parse(savedSettings);
+
+    // Apply School Name
+    if (s.schoolName) {
+      document.querySelectorAll('.dyn-school-name').forEach(el => el.textContent = s.schoolName);
+    }
+    if (s.schoolShortName) {
+      document.querySelectorAll('.dyn-school-short').forEach(el => el.textContent = s.schoolShortName);
+    }
+    if (s.schoolAddress) {
+      document.querySelectorAll('.dyn-school-address').forEach(el => el.textContent = s.schoolAddress);
+    }
+    if (s.schoolPhone) {
+      document.querySelectorAll('.dyn-school-phone').forEach(el => el.textContent = s.schoolPhone);
+    }
+    if (s.schoolEmail) {
+      document.querySelectorAll('.dyn-school-email').forEach(el => el.textContent = s.schoolEmail);
+    }
+    if (s.headmasterName) {
+      document.querySelectorAll('.dyn-headmaster-name').forEach(el => el.textContent = s.headmasterName);
+    }
+    if (s.headmasterNip) {
+      document.querySelectorAll('.dyn-headmaster-nip').forEach(el => el.textContent = s.headmasterNip);
+    }
+    if (s.headmasterSpeech) {
+      document.querySelectorAll('.dyn-headmaster-speech').forEach(el => el.textContent = s.headmasterSpeech);
+    }
+    if (s.headmasterPhoto) {
+      document.querySelectorAll('.dyn-headmaster-photo').forEach(el => el.src = s.headmasterPhoto);
+    }
+
+    // Apply Theme Palette if customized
+    if (s.themeColor) {
+      const root = document.documentElement;
+      if (s.themeColor === 'emerald') {
+        root.style.setProperty('--primary', '#059669');
+        root.style.setProperty('--primary-dark', '#047857');
+        root.style.setProperty('--secondary', '#10b981');
+      } else if (s.themeColor === 'indigo') {
+        root.style.setProperty('--primary', '#4f46e5');
+        root.style.setProperty('--primary-dark', '#3730a3');
+        root.style.setProperty('--secondary', '#6366f1');
+      } else if (s.themeColor === 'purple') {
+        root.style.setProperty('--primary', '#7c3aed');
+        root.style.setProperty('--primary-dark', '#5b21b6');
+        root.style.setProperty('--secondary', '#a855f7');
+      } else if (s.themeColor === 'amber') {
+        root.style.setProperty('--primary', '#d97706');
+        root.style.setProperty('--primary-dark', '#b45309');
+        root.style.setProperty('--secondary', '#f59e0b');
+      } else {
+        // Default Classic Blue
+        root.style.setProperty('--primary', '#1e40af');
+        root.style.setProperty('--primary-dark', '#1e3a8a');
+        root.style.setProperty('--secondary', '#0ea5e9');
+      }
+    }
+  } catch (e) {
+    console.error('Error applying web settings:', e);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Apply Web Settings immediately
+  applyWebSettings();
+
   // Initialize Lucide Icons
   if (typeof lucide !== 'undefined') {
     lucide.createIcons();
@@ -34,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (mobileMenuClose) mobileMenuClose.addEventListener('click', closeMobileMenu);
   if (mobileMenuOverlay) mobileMenuOverlay.addEventListener('click', closeMobileMenu);
 
-  // Navbar Scroll effect (shadow & background change on scroll)
+  // Navbar Scroll effect
   const headerNav = document.getElementById('mainHeader');
   if (headerNav) {
     window.addEventListener('scroll', () => {
@@ -57,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const target = +counter.getAttribute('data-target');
       const suffix = counter.getAttribute('data-suffix') || '';
       let count = 0;
-      const speed = target / 60; // adjust animation speed
+      const speed = target / 60;
 
       const updateCount = () => {
         count += speed;
@@ -128,13 +199,11 @@ document.addEventListener('DOMContentLoaded', () => {
     toastContainer.appendChild(toast);
     if (typeof lucide !== 'undefined') lucide.createIcons();
 
-    // Trigger animation in
     setTimeout(() => {
       toast.classList.remove('translate-y-4', 'opacity-0');
       toast.classList.add('translate-y-0', 'opacity-100');
     }, 10);
 
-    // Auto remove
     setTimeout(() => {
       toast.classList.add('opacity-0', 'translate-y-2');
       setTimeout(() => toast.remove(), 300);

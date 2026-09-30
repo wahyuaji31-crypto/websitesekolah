@@ -58,6 +58,9 @@
         <a href="#dashboard" onclick="showTab('dashboard')" id="nav-dashboard" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl bg-brand-600 text-white shadow transition-all">
           <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Ringkasan Dashboard
         </a>
+        <a href="#setting-web" onclick="showTab('setting-web')" id="nav-setting-web" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+          <i data-lucide="sliders" class="w-4 h-4 text-amber-400"></i> Pengaturan Website (Setting Web)
+        </a>
         <a href="#ppdb" onclick="showTab('ppdb')" id="nav-ppdb" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
           <i data-lucide="users" class="w-4 h-4"></i> Data Pendaftar PPDB
         </a>
@@ -68,7 +71,7 @@
           <i data-lucide="mail" class="w-4 h-4"></i> Pesan & Aspirasi
         </a>
         <a href="#pengaturan" onclick="showTab('pengaturan')" id="nav-pengaturan" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
-          <i data-lucide="settings" class="w-4 h-4"></i> Ganti Password & Akun
+          <i data-lucide="lock" class="w-4 h-4"></i> Ganti Password & Akun
         </a>
       </nav>
     </div>
@@ -129,11 +132,14 @@
             </span>
             <h2 class="text-2xl font-extrabold">Portal Kontrol SMAN 1 Bengkayang</h2>
             <p class="text-xs text-slate-300 max-w-xl">
-              Kelola data pendaftaran calon peserta didik baru, terbitkan warta sekolah terbaru, dan pantau pesan pengaduan pengunjung secara real-time.
+              Kelola nama sekolah, alamat, sambutan kepala sekolah, tema warna, serta data pendaftaran siswa baru secara langsung.
             </p>
           </div>
-          <div class="flex gap-2">
-            <button onclick="showTab('ppdb')" class="px-4 py-2.5 rounded-xl bg-accent-500 hover:bg-accent-600 text-white text-xs font-bold shadow transition-all">
+          <div class="flex flex-wrap gap-2">
+            <button onclick="showTab('setting-web')" class="px-4 py-2.5 rounded-xl bg-accent-500 hover:bg-accent-600 text-white text-xs font-bold shadow flex items-center gap-1.5 transition-all">
+              <i data-lucide="sliders" class="w-3.5 h-3.5"></i> Setting Web
+            </button>
+            <button onclick="showTab('ppdb')" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold backdrop-blur-md transition-all">
               Buka Data PPDB
             </button>
           </div>
@@ -187,6 +193,173 @@
           </div>
 
         </div>
+
+      </div>
+
+      <!-- TAB: PENGATURAN WEBSITE (SETTING WEB) -->
+      <div id="tab-setting-web" class="tab-content hidden space-y-6">
+        
+        <form onsubmit="saveWebSettings(event)" class="space-y-6">
+          
+          <!-- Header Banner -->
+          <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
+                  <i data-lucide="sliders" class="w-4 h-4"></i>
+                </div>
+                <h3 class="text-xl font-extrabold text-slate-900">Pengaturan Website (Setting Web)</h3>
+              </div>
+              <p class="text-xs text-slate-500 mt-1">Sesuaikan identitas nama sekolah, alamat, sambutan pimpinan, dan tema tampilan secara langsung.</p>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="resetWebSettings()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-xs font-bold hover:bg-slate-50 transition-colors">
+                Reset Default
+              </button>
+              <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white text-xs font-bold shadow-md flex items-center gap-2 transition-all">
+                <i data-lucide="save" class="w-4 h-4"></i> Simpan Pengaturan
+              </button>
+            </div>
+          </div>
+
+          <!-- Section 1: Identitas Sekolah -->
+          <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+            <h4 class="font-bold text-slate-900 text-base flex items-center gap-2 border-b border-slate-100 pb-3">
+              <i data-lucide="school" class="w-5 h-5 text-brand-600"></i>
+              1. Identitas Lembaga & Branding
+            </h4>
+
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Lengkap Sekolah</label>
+                <input type="text" id="setSchoolName" required class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Singkatan / Nama Singkat</label>
+                <input type="text" id="setSchoolShortName" required class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Nomor Pokok Sekolah Nasional (NPSN)</label>
+                <input type="text" id="setSchoolNpsn" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Status Akreditasi</label>
+                <input type="text" id="setSchoolAccreditation" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Motto / Tagline Pendidikan</label>
+                <input type="text" id="setSchoolTagline" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Alamat & Kontak Resmi -->
+          <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+            <h4 class="font-bold text-slate-900 text-base flex items-center gap-2 border-b border-slate-100 pb-3">
+              <i data-lucide="map-pin" class="w-5 h-5 text-brand-600"></i>
+              2. Alamat Kampus & Saluran Kontak
+            </h4>
+
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Lengkap Sekolah (Jalan, Kota, Provinsi, Kode Pos)</label>
+                <input type="text" id="setSchoolAddress" required class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Nomor Telepon Kantor / TU</label>
+                <input type="text" id="setSchoolPhone" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Nomor WhatsApp Resmi / Humas</label>
+                <input type="text" id="setSchoolWhatsapp" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Email Resmi Sekolah</label>
+                <input type="email" id="setSchoolEmail" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Email Panitia PPDB</label>
+                <input type="email" id="setSchoolPpdbEmail" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Profil Kepala Sekolah -->
+          <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+            <h4 class="font-bold text-slate-900 text-base flex items-center gap-2 border-b border-slate-100 pb-3">
+              <i data-lucide="user-check" class="w-5 h-5 text-brand-600"></i>
+              3. Profil Kepala Sekolah & Sambutan
+            </h4>
+
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Lengkap Kepala Sekolah + Gelar</label>
+                <input type="text" id="setHeadmasterName" required class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">NIP Kepala Sekolah</label>
+                <input type="text" id="setHeadmasterNip" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-semibold text-slate-700 mb-1">URL Foto Resmi Kepala Sekolah</label>
+                <input type="url" id="setHeadmasterPhoto" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Kutipan Kata Sambutan Kepala Sekolah</label>
+                <textarea id="setHeadmasterSpeech" rows="4" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 4: Tema Warna & Status PPDB -->
+          <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+            <h4 class="font-bold text-slate-900 text-base flex items-center gap-2 border-b border-slate-100 pb-3">
+              <i data-lucide="palette" class="w-5 h-5 text-brand-600"></i>
+              4. Tema Tampilan & Status Pendaftaran PPDB
+            </h4>
+
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Aksen Warna Tema Website</label>
+                <select id="setThemeColor" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold">
+                  <option value="blue">🔵 Biru Edukasi (Klasik)</option>
+                  <option value="emerald">🟢 Hijau Zamrud (Adiwiyata & Segar)</option>
+                  <option value="indigo">🟣 Indigo Royal (Modern)</option>
+                  <option value="purple">🔮 Ungu Elegan (Inovatif)</option>
+                  <option value="amber">🟡 Emas / Amber (Prestasi)</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Status Gelombang PPDB Online</label>
+                <select id="setPpdbStatus" class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold">
+                  <option value="Buka">🟢 Dibuka (Menerima Pendaftaran)</option>
+                  <option value="Tutup">🔴 Ditutup Sementara</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Submit Action -->
+          <div class="flex items-center justify-end gap-3 pt-2">
+            <button type="submit" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white text-sm font-bold shadow-lg shadow-brand-600/30 hover:scale-[1.01] transition-all flex items-center gap-2">
+              <i data-lucide="check" class="w-4 h-4"></i> Simpan Seluruh Pengaturan Web
+            </button>
+          </div>
+
+        </form>
 
       </div>
 
@@ -373,6 +546,7 @@
       // Title update
       const titles = {
         'dashboard': 'Ringkasan Dashboard',
+        'setting-web': 'Pengaturan Website (Setting Web)',
         'ppdb': 'Manajemen Pendaftar PPDB Online',
         'berita': 'Manajemen Berita & Warta Sekolah',
         'pesan': 'Kotak Masuk Pesan & Pengaduan',
@@ -381,6 +555,8 @@
       if (document.getElementById('pageTitle')) {
         document.getElementById('pageTitle').textContent = titles[tabName] || 'Dashboard Admin';
       }
+
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     // Publish News Handler

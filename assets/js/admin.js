@@ -1,6 +1,6 @@
 /**
  * Admin Panel Management Script
- * Handles PPDB Data CRUD, Status Updates, News Management, and Settings
+ * Handles PPDB Data CRUD, Status Updates, News Management, Setting Web, and Settings
  */
 
 // Initial Sample Data if empty
@@ -10,7 +10,7 @@ const DEFAULT_PPDB_DATA = [
     fullName: 'Ahmad Faiz Al-Ghifari',
     nisn: '0078912345',
     gender: 'Laki-laki',
-    birthPlace: 'Jakarta',
+    birthPlace: 'Bengkayang',
     birthDate: '2009-04-12',
     prevSchool: 'SMP Negeri 1 Bengkayang',
     track: 'Jalur Prestasi Akademik',
@@ -26,14 +26,14 @@ const DEFAULT_PPDB_DATA = [
     fullName: 'Siti Nur Aisyah',
     nisn: '0081234567',
     gender: 'Perempuan',
-    birthPlace: 'Bandung',
+    birthPlace: 'Pontianak',
     birthDate: '2009-08-20',
     prevSchool: 'SMP Islam Terpadu Amanah',
     track: 'Jalur Zonasi',
     major: 'IPS (Sosial & Humaniora)',
     parentName: 'Rahmat Hidayat',
     phone: '085712345678',
-    address: 'Jl. Merak Blok B3 No. 8',
+    address: 'Jl. Merak Blok B3 No. 8, Bengkayang',
     regDate: '29 September 2026',
     status: 'Terverifikasi'
   },
@@ -42,7 +42,7 @@ const DEFAULT_PPDB_DATA = [
     fullName: 'Kevin Jonathan',
     nisn: '0074567890',
     gender: 'Laki-laki',
-    birthPlace: 'Surabaya',
+    birthPlace: 'Singkawang',
     birthDate: '2009-01-15',
     prevSchool: 'SMP Negeri 2 Bengkayang',
     track: 'Jalur Prestasi Non-Akademik',
@@ -58,14 +58,14 @@ const DEFAULT_PPDB_DATA = [
     fullName: 'Dewi Anjani',
     nisn: '0089876543',
     gender: 'Perempuan',
-    birthPlace: 'Semarang',
+    birthPlace: 'Bengkayang',
     birthDate: '2009-11-05',
     prevSchool: 'SMP Negeri 4 Kota',
     track: 'Jalur Afirmasi',
     major: 'Bahasa & Budaya Internasional',
     parentName: 'Kasiman',
     phone: '087811223344',
-    address: 'Kampung Rawa No. 42',
+    address: 'Jl. Bumi Emas No. 42, Bengkayang',
     regDate: '30 September 2026',
     status: 'Terverifikasi'
   }
@@ -90,11 +90,30 @@ const DEFAULT_MESSAGES = [
     phone: '085611223344',
     category: 'Kerja Sama & Kemitraan',
     subject: 'Permohonan Sharing Session Campus Expo 2026',
-    message: 'Halo Humas SMAN 1, kami dari ikatan alumni ingin mengadakan sesi bimbingan masuk perguruan tinggi negeri untuk adik-adik kelas XII. Mohon konfirmasi jadwal.',
+    message: 'Halo Humas SMAN 1 Bengkayang, kami dari ikatan alumni ingin mengadakan sesi bimbingan masuk perguruan tinggi negeri untuk adik-adik kelas XII. Mohon konfirmasi jadwal.',
     date: '29 September 2026, 14:30 WIB',
     isRead: true
   }
 ];
+
+const DEFAULT_WEB_SETTINGS = {
+  schoolName: 'SMA Negeri 1 Bengkayang',
+  schoolShortName: 'SMAN 1 Bengkayang',
+  schoolTagline: 'Mewujudkan Generasi Emas yang Cerdas, Berkarakter & Berdaya Saing Global',
+  schoolNpsn: '30101234',
+  schoolAccreditation: 'Akreditasi A (Unggul)',
+  schoolAddress: 'Jl. Sanggau Ledo No. 45, Bengkayang, Kalimantan Barat, 79212',
+  schoolPhone: '(0562) 631-890',
+  schoolWhatsapp: '+62 812-3456-7890',
+  schoolEmail: 'info@sman1bky.sch.id',
+  schoolPpdbEmail: 'ppdb@sman1bky.sch.id',
+  headmasterName: 'Dr. H. Rahmat Hidayat, M.Pd.',
+  headmasterNip: 'NIP. 19740512 199903 1 004',
+  headmasterPhoto: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop',
+  headmasterSpeech: 'Puji dan syukur kita panjatkan ke hadirat Tuhan Yang Maha Esa. Di era transformasi digital saat ini, pendidikan tidak hanya menuntut penguasaan akademis, namun juga pembentukan karakter akhlak mulia dan daya nalar kritis. SMA Negeri 1 Bengkayang terus berkomitmen menciptakan ekosistem belajar yang ramah, inovatif, dan berstandar internasional.',
+  themeColor: 'blue',
+  ppdbStatus: 'Buka'
+};
 
 // Check Authentication
 function checkAuth() {
@@ -120,7 +139,6 @@ function loadData() {
   const savedPPDB = localStorage.getItem('ppdb_registrations');
   if (savedPPDB) {
     ppdbList = JSON.parse(savedPPDB);
-    // Combine with default if empty
     if (ppdbList.length === 0) {
       ppdbList = [...DEFAULT_PPDB_DATA];
       localStorage.setItem('ppdb_registrations', JSON.stringify(ppdbList));
@@ -156,7 +174,8 @@ function renderPPDBTable(filterTrack = 'all', searchQuery = '') {
     return matchesTrack && matchesSearch;
   });
 
-  document.getElementById('ppdbCountBadge').textContent = `${filtered.length} Pendaftar`;
+  const countBadge = document.getElementById('ppdbCountBadge');
+  if (countBadge) countBadge.textContent = `${filtered.length} Pendaftar`;
 
   if (filtered.length === 0) {
     tbody.innerHTML = `
@@ -169,7 +188,7 @@ function renderPPDBTable(filterTrack = 'all', searchQuery = '') {
     return;
   }
 
-  filtered.forEach((item, index) => {
+  filtered.forEach((item) => {
     const tr = document.createElement('tr');
     tr.className = 'border-b border-slate-100 hover:bg-slate-50/80 text-xs text-slate-700 transition-colors';
 
@@ -243,7 +262,7 @@ function viewApplicantDetail(regNumber) {
   const item = ppdbList.find(p => p.regNumber === regNumber);
   if (!item) return;
 
-  alert(`DETAIL PENDAFTAR PPDB\n\nNo Registrasi: ${item.regNumber}\nNama Lengkap: ${item.fullName}\nNISN: ${item.nisn}\nJenis Kelamin: ${item.gender}\nTTL: ${item.birthPlace}, ${item.birthDate}\nAsal SMP: ${item.prevSchool}\nJalur: ${item.track}\nPeminatan: ${item.major}\nOrang Tua/Wali: ${item.parentName}\nWhatsApp: ${item.phone}\nAlamat: ${item.address}\nStatus Seleksi: ${item.status}`);
+  alert(`DETAIL PENDAFTAR PPDB\n\nNo Registrasi: ${item.regNumber}\nNama Lengkap: ${item.fullName}\nNISN: ${item.nisn}\nJenis Kelamin: ${item.gender || '-'}\nTTL: ${item.birthPlace}, ${item.birthDate}\nAsal SMP: ${item.prevSchool}\nJalur: ${item.track}\nPeminatan: ${item.major}\nOrang Tua/Wali: ${item.parentName}\nWhatsApp: ${item.phone}\nAlamat: ${item.address}\nStatus Seleksi: ${item.status}`);
 }
 
 // Export CSV
@@ -277,7 +296,7 @@ function exportPPDBtoCSV() {
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
-  link.setAttribute("download", `Rekap_PPDB_SMAN1_${new Date().toISOString().slice(0,10)}.csv`);
+  link.setAttribute("download", `Rekap_PPDB_SMAN1_Bengkayang_${new Date().toISOString().slice(0,10)}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -285,9 +304,13 @@ function exportPPDBtoCSV() {
 
 // Update Top Dashboard Stats Cards
 function updateStatsCards() {
-  document.getElementById('statTotalPPDB').textContent = ppdbList.length;
-  document.getElementById('statVerifiedPPDB').textContent = ppdbList.filter(p => p.status === 'Terverifikasi' || p.status === 'Lolos Seleksi').length;
-  document.getElementById('statTotalMessages').textContent = messagesList.length;
+  const statTotal = document.getElementById('statTotalPPDB');
+  const statVerified = document.getElementById('statVerifiedPPDB');
+  const statMsgs = document.getElementById('statTotalMessages');
+
+  if (statTotal) statTotal.textContent = ppdbList.length;
+  if (statVerified) statVerified.textContent = ppdbList.filter(p => p.status === 'Terverifikasi' || p.status === 'Lolos Seleksi').length;
+  if (statMsgs) statMsgs.textContent = messagesList.length;
 }
 
 // Render Messages
@@ -331,6 +354,80 @@ function deleteMessage(id) {
   if (window.showToast) window.showToast('Pesan berhasil dihapus', 'success');
 }
 
+// -------------------------------------------------------------
+// SETTING WEB (PENGATURAN WEBSITE DINAMIS)
+// -------------------------------------------------------------
+function loadWebSettings() {
+  const saved = localStorage.getItem('school_web_settings');
+  const s = saved ? JSON.parse(saved) : DEFAULT_WEB_SETTINGS;
+
+  const setVal = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val || '';
+  };
+
+  setVal('setSchoolName', s.schoolName);
+  setVal('setSchoolShortName', s.schoolShortName);
+  setVal('setSchoolTagline', s.schoolTagline);
+  setVal('setSchoolNpsn', s.schoolNpsn);
+  setVal('setSchoolAccreditation', s.schoolAccreditation);
+  setVal('setSchoolAddress', s.schoolAddress);
+  setVal('setSchoolPhone', s.schoolPhone);
+  setVal('setSchoolWhatsapp', s.schoolWhatsapp);
+  setVal('setSchoolEmail', s.schoolEmail);
+  setVal('setSchoolPpdbEmail', s.schoolPpdbEmail);
+  setVal('setHeadmasterName', s.headmasterName);
+  setVal('setHeadmasterNip', s.headmasterNip);
+  setVal('setHeadmasterPhoto', s.headmasterPhoto);
+  setVal('setHeadmasterSpeech', s.headmasterSpeech);
+  setVal('setThemeColor', s.themeColor || 'blue');
+  setVal('setPpdbStatus', s.ppdbStatus || 'Buka');
+}
+
+function saveWebSettings(e) {
+  if (e) e.preventDefault();
+
+  const getVal = (id) => {
+    const el = document.getElementById(id);
+    return el ? el.value.trim() : '';
+  };
+
+  const updatedSettings = {
+    schoolName: getVal('setSchoolName'),
+    schoolShortName: getVal('setSchoolShortName'),
+    schoolTagline: getVal('setSchoolTagline'),
+    schoolNpsn: getVal('setSchoolNpsn'),
+    schoolAccreditation: getVal('setSchoolAccreditation'),
+    schoolAddress: getVal('setSchoolAddress'),
+    schoolPhone: getVal('setSchoolPhone'),
+    schoolWhatsapp: getVal('setSchoolWhatsapp'),
+    schoolEmail: getVal('setSchoolEmail'),
+    schoolPpdbEmail: getVal('setSchoolPpdbEmail'),
+    headmasterName: getVal('setHeadmasterName'),
+    headmasterNip: getVal('setHeadmasterNip'),
+    headmasterPhoto: getVal('setHeadmasterPhoto'),
+    headmasterSpeech: getVal('setHeadmasterSpeech'),
+    themeColor: getVal('setThemeColor') || 'blue',
+    ppdbStatus: getVal('setPpdbStatus') || 'Buka'
+  };
+
+  localStorage.setItem('school_web_settings', JSON.stringify(updatedSettings));
+  
+  if (window.showToast) {
+    window.showToast('Pengaturan website berhasil disimpan dan diterapkan!', 'success');
+  } else {
+    alert('Pengaturan website berhasil disimpan!');
+  }
+}
+
+function resetWebSettings() {
+  if (confirm('Apakah Anda yakin ingin mengembalikan seluruh pengaturan website ke default SMAN 1 Bengkayang?')) {
+    localStorage.setItem('school_web_settings', JSON.stringify(DEFAULT_WEB_SETTINGS));
+    loadWebSettings();
+    if (window.showToast) window.showToast('Pengaturan website dikembalikan ke default.', 'success');
+  }
+}
+
 // Initialize on DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
   checkAuth();
@@ -338,6 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateStatsCards();
   renderPPDBTable();
   renderMessages();
+  loadWebSettings();
 
   // Search & Filter Listeners
   const trackFilter = document.getElementById('adminTrackFilter');
